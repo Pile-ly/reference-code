@@ -1,0 +1,70 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong: {{reason}}",
+    "notFound": "This post doesn't exist.",
+    "back": "Back to all posts",
+    "untitled": "Untitled"
+  },
+  "nav": {
+    "signIn": "Login with Pilely",
+    "drafts": "Drafts ({{count}})",
+    "newPost": "New post",
+    "signOut": "Sign out"
+  },
+  "masthead": {
+    "by": "by @{{handle}}"
+  },
+  "card": {
+    "minRead": "{{mins}} min read",
+    "comments_one": "{{count}} comment",
+    "comments_other": "{{count}} comments"
+  },
+  "post": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Delete this post? This can't be undone.",
+    "postDeleted": "Post deleted",
+    "commentsHeading_one": "{{count}} comment",
+    "commentsHeading_other": "{{count}} comments",
+    "composerPlaceholder": "Add a comment as @{{handle}}",
+    "postComment": "Post comment",
+    "commentAdded": "Comment posted",
+    "gateLead": "Join the conversation — comments are for signed-in readers.",
+    "remove": "Remove",
+    "confirmRemove": "Remove this comment?",
+    "commentRemoved": "Comment removed",
+    "signInToLike": "Login with Pilely to like posts",
+    "alreadyLiked": "Already liked — a like can't be taken back",
+    "likeAria": "Like this post"
+  },
+  "editor": {
+    "titlePlaceholder": "Title",
+    "subtitlePlaceholder": "Add a subtitle…",
+    "bodyPlaceholder": "Write in markdown…",
+    "hint": "markdown · ~16 KB max per post (simple_db record limit)",
+    "saveDraft": "Save draft",
+    "publish": "Publish",
+    "update": "Update post",
+    "draftSaved": "Draft saved",
+    "published": "Published",
+    "postUpdated": "Post updated",
+    "saveFailed": "Couldn't save: {{reason}}"
+  },
+  "drafts": {
+    "heading": "Drafts",
+    "sub": "Only you can see these.",
+    "empty": "No drafts. Enjoy the silence.",
+    "edit": "Edit",
+    "publish": "Publish",
+    "delete": "Delete",
+    "confirmDelete": "Delete this draft? This can't be undone.",
+    "noSubtitle": "No subtitle"
+  },
+  "footer": {
+    "aiHint": "You can also use this app straight from your AI client — just tell it: \"curl {{origin}}/?isAgent=1\"."
+  },
+  "theme": {
+    "toggleAria": "Toggle dark/light theme"
+  }
+}

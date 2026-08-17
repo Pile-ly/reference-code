@@ -1,0 +1,421 @@
+/* Tailwind v4 entry + the storefront's two themes (SPA standard §10: dark
+   AND light are both real; first paint follows the device via the
+   pre-paint bootstrap in index.html, the nav toggle persists an
+   override). All component color comes from these variables — never a
+   literal — so both themes stay complete by construction.
+
+   Look: "dark & bold" per the UX spec (reference_storefront_ux.html) —
+   near-black stacked sections, big condensed display type, one hot
+   accent, alternating hero bands. The light theme keeps the same bones
+   (bold type, hot accent, banded sections) on warm paper. */
+@import "tailwindcss";
+
+:root {
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+  --display: "Impact", "Arial Black", "Helvetica Neue", sans-serif;
+
+  /* SPA standard §9/§9a: top clearance for the Pilely mobile app's floating
+     chrome. 0 in a plain browser; inside the app the index.html bootstrap
+     tags <html> with .pilely-in-app (and publishes --pilely-safe-top). */
+  --pilely-top-clearance: 0px;
+}
+
+:root.pilely-in-app {
+  --pilely-top-clearance: var(--pilely-safe-top, calc(env(safe-area-inset-top, 24px) + 56px));
+}
+
+/* Gym palette from the UX spec. --canvas is the page/nav ground, --panel
+   the hero/final bands, --panel2 the testimonial band. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --accent: #e04a1f;
+  --on-accent: #ffffff;
+  --canvas: #14110d;
+  --panel: #221c14;
+  --panel2: #2f261a;
+  --ink: #f5f2ec;
+  --muted: #b6ae9f;
+  --faint: #6a6357;
+  --hairline: #2c261c;
+  --on-ink: #1a1a1a;
+  --field: #1e1912;
+  --field-border: #3d3527;
+  --stripe: rgba(255, 255, 255, 0.02);
+  --lvl-all-bg: #24391f;
+  --lvl-all-fg: #9fd68a;
+  --lvl-advanced-bg: #3d2c14;
+  --lvl-advanced-fg: #e8b04a;
+  --lvl-youth-bg: #17303d;
+  --lvl-youth-fg: #7ab8e0;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --accent: #d4431a;
+  --on-accent: #ffffff;
+  --canvas: #faf8f4;
+  --panel: #f0ece3;
+  --panel2: #e7e1d3;
+  --ink: #1c1712;
+  --muted: #5f584c;
+  --faint: #97907f;
+  --hairline: #e3ddd0;
+  --on-ink: #ffffff;
+  --field: #ffffff;
+  --field-border: #d5cebd;
+  --stripe: rgba(0, 0, 0, 0.035);
+  --lvl-all-bg: #e2efdc;
+  --lvl-all-fg: #3c6b2b;
+  --lvl-advanced-bg: #f3e6cf;
+  --lvl-advanced-fg: #8a6114;
+  --lvl-youth-bg: #dcebf5;
+  --lvl-youth-fg: #2b5e80;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--sans);
+}
+
+/* §9: the clearance band is padding on the nav, painted with the nav's own
+   solid background (the active theme's canvas) so the top of the screen
+   reads as part of the app, never an empty strip. */
+.app-nav {
+  padding-top: var(--pilely-top-clearance);
+  background: var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* ── Nav ── */
+
+.brand {
+  font-family: var(--display);
+  font-size: 17px;
+  letter-spacing: 2px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.brand em {
+  color: var(--accent);
+  font-style: normal;
+}
+
+.nav-link {
+  color: var(--muted);
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+}
+.nav-link:hover,
+.nav-link.on {
+  color: var(--ink);
+}
+.nav-link-admin {
+  color: var(--accent);
+}
+.nav-link-admin:hover,
+.nav-link-admin.on {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ── Shared controls ── */
+
+.cta {
+  background: var(--accent);
+  border: none;
+  color: var(--on-accent);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--sans);
+  white-space: nowrap;
+}
+.cta:active {
+  transform: scale(0.98);
+}
+.cta:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.mini-btn {
+  border: 1px solid var(--field-border);
+  background: transparent;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--muted);
+}
+.mini-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Outline button (class rows' Inquire, admin Load more). */
+.inquire-btn {
+  background: none;
+  border: 1px solid var(--field-border);
+  color: var(--muted);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--sans);
+  white-space: nowrap;
+}
+.inquire-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.inquire-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ── Landing sections ── */
+
+.hero {
+  background: var(--panel);
+  text-align: center;
+  padding: clamp(52px, 9vw, 84px) 24px clamp(48px, 8vw, 76px);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(-55deg, transparent 0 26px, var(--stripe) 26px 52px);
+}
+.hero > * {
+  position: relative;
+}
+
+.kicker {
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(38px, 8vw, 58px);
+  line-height: 0.98;
+  color: var(--ink);
+  letter-spacing: 1px;
+  margin: 14px 0 16px;
+  text-transform: uppercase;
+}
+
+.hero-sub {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 26px;
+}
+
+.stat {
+  padding: 0 30px;
+  text-align: center;
+  border-left: 1px solid var(--hairline);
+}
+.stat:first-child {
+  border-left: none;
+}
+.stat-value {
+  font-family: var(--display);
+  font-size: 30px;
+  color: var(--ink);
+  letter-spacing: 1px;
+}
+.stat-label {
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.band-title {
+  font-family: var(--display);
+  font-size: 26px;
+  color: var(--ink);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.band-body {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.quote {
+  background: var(--panel2);
+  text-align: center;
+  padding: 56px 30px;
+}
+.quote p {
+  font-size: 20px;
+  color: var(--ink);
+  line-height: 1.5;
+  max-width: 540px;
+  margin: 0 auto;
+  font-style: italic;
+}
+.quote-by {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 14px;
+}
+
+.info-title {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.info-line {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.final {
+  text-align: center;
+  padding: 60px 24px 70px;
+  background: var(--panel);
+}
+.final-title {
+  font-family: var(--display);
+  font-size: clamp(28px, 6vw, 36px);
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.foot {
+  text-align: center;
+  padding: 18px;
+  font-size: 11px;
+  color: var(--faint);
+}
+
+/* ── Inner pages (classes / contact / admin) ── */
+
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 44px 26px 60px;
+}
+.page-title {
+  font-family: var(--display);
+  font-size: 34px;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.page-lead {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 8px 0 26px;
+}
+
+/* Class level chips (tone per class, both themes). */
+.lvl {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: 8px;
+  vertical-align: 2px;
+  white-space: nowrap;
+}
+.lvl-all {
+  background: var(--lvl-all-bg);
+  color: var(--lvl-all-fg);
+}
+.lvl-advanced {
+  background: var(--lvl-advanced-bg);
+  color: var(--lvl-advanced-fg);
+}
+.lvl-youth {
+  background: var(--lvl-youth-bg);
+  color: var(--lvl-youth-fg);
+}
+
+/* The admin list's class chip. */
+.chip {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--lvl-advanced-bg);
+  color: var(--lvl-advanced-fg);
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ── Contact form ── */
+
+.field-label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.field {
+  width: 100%;
+  background: var(--field);
+  border: 1px solid var(--field-border);
+  border-radius: 6px;
+  color: var(--ink);
+  padding: 11px 13px;
+  font-size: 13.5px;
+  font-family: var(--sans);
+  outline: none;
+  margin-bottom: 12px;
+}
+.field:focus {
+  border-color: var(--accent);
+}
+
+.gate {
+  border: 1px dashed var(--field-border);
+  border-radius: 10px;
+  padding: 34px 24px;
+  text-align: center;
+}
+.gate p {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.sent-title {
+  font-family: var(--display);
+  font-size: 26px;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

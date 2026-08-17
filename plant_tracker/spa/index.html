@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Theme bootstrap (standards/spa §10): decide dark/light BEFORE first
+         paint so there is no flash of the wrong theme. The in-app toggle
+         persists to localStorage; absent a stored choice we follow the
+         device. Classic inline script — Vite passes it through verbatim. -->
+    <script>
+      (function () {
+        var stored = null;
+        try { stored = localStorage.getItem("plant_tracker_theme"); } catch (e) {}
+        var theme = stored === "dark" || stored === "light"
+          ? stored
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <!-- pilely §9a bootstrap (standards/spa): inside the Pilely app the
+         WebView injects window.__PILELY_APP__ before any script runs. It
+         publishes the exact top clearance for the app's floating chrome as
+         --pilely-safe-top and tags <html> as in-app; CSS keeps the §9
+         universal fallback when the global is absent. In a plain browser
+         (no global) there is NO clearance — that band would just be an
+         empty strip. -->
+    <script>
+      (function () {
+        var app = window.__PILELY_APP__;
+        if (app && app.v >= 1) {
+          document.documentElement.classList.add("pilely-in-app");
+          if (Number.isFinite(app.safeAreaTop)) {
+            document.documentElement.style.setProperty(
+              "--pilely-safe-top", (app.safeAreaTop + 56) + "px");
+          }
+        }
+      })();
+    </script>
+    <!-- This app's id, so the platform client knows what to mint for.
+         REQUIRED STEP when you copy this app: replace the placeholder with
+         the real `pile_id` that /skill/app_management/register returned.
+         A bundle shipped with the placeholder has broken sign-in until
+         rebuilt and re-uploaded (see build_instruction.md).
+         ORDER MATTERS: this meta MUST sit ABOVE the client.js script tag.
+         The client reads the tag while it parses to know which app it is
+         running in. This app is PRIVATE, so there is no boot-time anonymous
+         mint here — but the standard's ordering rule is unconditional, and
+         a copier who later flips the app to `public` would be silently
+         burned by a reversed order (signed-out visitors would get no anon
+         credential and bounce to the login page on the first read). -->
+    <meta name="pilely-app" content="REPLACE_WITH_YOUR_PILE_ID" />
+    <!-- The platform auth runtime (standards/spa §0). MANDATORY in every
+         neoApp — it handles the whole sign-in dance (PKCE, callback, token
+         storage, silent re-mint). On this PRIVATE app there is no anonymous
+         credential, ever: `window.pilely.user()` is null until the owner
+         signs in, and the SPA renders its sign-in gate on exactly that test.
+         Loaded from the APEX because platform paths (`/~/…`) are apex-only;
+         a cross-origin script here is expected. Classic (non-module) and
+         before the bundle, so `window.pilely` exists by first render. Never
+         reimplement any of this locally. -->
+    <script src="https://pilely.app/~/client.js"></script>
+    <!-- pilely: append ?isAgent=1 to this URL for the agent/markdown view -->
+    <!-- §7a: advertise that markdown view in the DOM too, as a live
+         <link rel="alternate"> for the CURRENT route. This pre-paint
+         script covers the entry URL; the SPA re-points it on every
+         client-side navigation (src/hooks/useAgentAlternateLink.ts) —
+         the platform's Link header only covers the shell fetch itself,
+         which a client-side navigation never repeats. -->
+    <script>
+      (function () {
+        var params = new URLSearchParams(location.search);
+        params.set("isAgent", "1");
+        var link = document.createElement("link");
+        link.id = "pilely-agent-alternate";
+        link.rel = "alternate";
+        link.type = "text/markdown";
+        link.setAttribute("href", location.pathname + "?" + params.toString());
+        document.head.appendChild(link);
+      })();
+    </script>
+    <title>Waterly</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

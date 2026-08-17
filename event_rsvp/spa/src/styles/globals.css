@@ -1,0 +1,488 @@
+/* Tailwind v4 entry + the club's two themes (SPA standard §10: dark AND
+   light are both real; first paint follows the device via the pre-paint
+   bootstrap in index.html, the nav toggle persists an override). All
+   component color comes from these variables — never a literal — so both
+   themes stay complete by construction.
+
+   Look: "warm and welcoming" per the UX spec (reference_event_rsvp_ux.html)
+   — cream canvas, white cards with soft hairlines, generous rounding,
+   colorful cover heroes, a terracotta accent, and green/red only where
+   they carry meaning (going / can't). The dark theme keeps the same bones
+   on a warm near-black. */
+@import "tailwindcss";
+
+:root {
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+
+  /* SPA standard §9/§9a: top clearance for the Pilely mobile app's floating
+     chrome. 0 in a plain browser; inside the app the index.html bootstrap
+     tags <html> with .pilely-in-app (and publishes --pilely-safe-top). */
+  --pilely-top-clearance: 0px;
+
+  /* Cover placeholders for events with no photo — the UX demo's four
+     gradients, picked deterministically per record id (tintOf). */
+  --cover-0: linear-gradient(135deg, #f6c34c, #e2604a);
+  --cover-1: linear-gradient(135deg, #7fb069, #3d7a5d);
+  --cover-2: linear-gradient(135deg, #9b8ccf, #5b62b0);
+  --cover-3: linear-gradient(135deg, #e88fb1, #c2534f);
+}
+
+:root.pilely-in-app {
+  --pilely-top-clearance: var(--pilely-safe-top, calc(env(safe-area-inset-top, 24px) + 56px));
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --accent: #e25c4a;
+  --accent-soft: #fdeeea;
+  --on-accent: #ffffff;
+  --canvas: #faf7f2;
+  --paper: #ffffff;
+  --ink: #201d1a;
+  --on-ink: #ffffff;
+  --body: #453f38;
+  --muted: #6f6a63;
+  --faint: #a09a91;
+  --hairline: #ece7df;
+  --field: #ffffff;
+  --going: #1d7a4f;
+  --going-soft: #e3f3ea;
+  --cant: #b3392e;
+  --cant-soft: #fbe9e7;
+  --dim: #f0ede8;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --accent: #f0705c;
+  --accent-soft: #3a231e;
+  --on-accent: #1a120f;
+  --canvas: #171412;
+  --paper: #201c19;
+  --ink: #f4efe7;
+  --on-ink: #201d1a;
+  --body: #d4ccc1;
+  --muted: #a9a196;
+  --faint: #777066;
+  --hairline: #2e2823;
+  --field: #17140f;
+  --going: #6fd39c;
+  --going-soft: #16301f;
+  --cant: #f08d80;
+  --cant-soft: #331a17;
+  --dim: #262119;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--sans);
+}
+
+/* ── Nav ────────────────────────────────────────────────────────────────
+   §9: the clearance band is padding on the nav, painted with the nav's own
+   solid background (the active theme's canvas) so the top of the screen
+   reads as part of the app, never an empty strip. */
+.app-nav {
+  padding-top: var(--pilely-top-clearance);
+  background: var(--canvas);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.brand-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex: none;
+}
+
+.host-link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 2px;
+}
+.host-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Buttons ── */
+
+.btn {
+  border: none;
+  background: var(--ink);
+  color: var(--on-ink);
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--sans);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  transform: none;
+}
+.btn-accent {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.btn-ghost {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+}
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--ink);
+}
+.btn-sm {
+  padding: 7px 14px;
+  font-size: 12px;
+}
+
+/* Small outline control: theme toggle, sign out, Edit / Cancel / Delete. */
+.mini-btn {
+  border: 1px solid var(--hairline);
+  background: var(--paper);
+  border-radius: 8px;
+  padding: 5px 11px;
+  font-size: 11.5px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--sans);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.mini-btn:hover:not(:disabled) {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.mini-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.mini-btn.danger:hover:not(:disabled) {
+  border-color: var(--cant);
+  color: var(--cant);
+}
+
+/* ── Page column ── */
+
+.col {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 8px 20px 56px;
+}
+.sechead {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+  font-weight: 600;
+  margin: 18px 0 10px;
+}
+
+/* ── Home: host header + event cards ── */
+
+.host-av {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 600;
+  flex: none;
+}
+
+.ecard {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+  font-family: var(--sans);
+  color: inherit;
+}
+.ecard:hover {
+  transform: translateY(-1px);
+}
+.ecard.past {
+  opacity: 0.62;
+}
+.ecard.past .cover {
+  filter: grayscale(0.5);
+}
+
+/* The cover surface: a photo when the event has one, otherwise its tint. */
+.cover {
+  background-size: cover;
+  background-position: center;
+  display: block;
+}
+
+.datebadge {
+  text-align: center;
+  background: var(--accent-soft);
+  border-radius: 10px;
+  padding: 7px 10px;
+  align-self: flex-start;
+  min-width: 48px;
+  flex: none;
+}
+.datebadge-m {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+}
+.datebadge-d {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.1;
+}
+
+.chip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.chip.going {
+  background: var(--going-soft);
+  color: var(--going);
+}
+.chip.cant {
+  background: var(--cant-soft);
+  color: var(--cant);
+}
+.chip.canceled {
+  background: var(--dim);
+  color: var(--faint);
+}
+
+/* ── Event page ── */
+
+.hero {
+  height: 200px;
+  position: relative;
+}
+@media (max-width: 520px) {
+  .hero {
+    height: 150px;
+  }
+}
+.back-btn {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #201d1a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.meta-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 13.5px;
+  color: var(--muted);
+  padding: 3px 0;
+}
+.meta-ic {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.desc {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--body);
+  white-space: pre-wrap;
+}
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.statusbtn {
+  flex: 1;
+  border: 1px solid var(--hairline);
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 11px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--sans);
+}
+.statusbtn.going.on {
+  background: var(--going-soft);
+  border-color: var(--going);
+  color: var(--going);
+}
+.statusbtn.cant.on {
+  background: var(--cant-soft);
+  border-color: var(--cant);
+  color: var(--cant);
+}
+
+.step {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--hairline);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+}
+.step:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.field {
+  width: 100%;
+  background: var(--field);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  color: var(--ink);
+  padding: 10px 12px;
+  font-size: 13.5px;
+  font-family: var(--sans);
+  outline: none;
+}
+.field:focus {
+  border-color: var(--accent);
+}
+textarea.field {
+  min-height: 72px;
+  resize: vertical;
+}
+.field-label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  font-weight: 600;
+  margin: 12px 0 5px;
+}
+
+.memo {
+  font-size: 12px;
+  color: var(--going);
+}
+.memo.none {
+  color: var(--faint);
+}
+
+/* ── Host portal ── */
+
+.astat {
+  flex: 1;
+  background: var(--canvas);
+  border-radius: 10px;
+  padding: 8px 10px;
+  text-align: center;
+}
+.astat-v {
+  font-size: 17px;
+  font-weight: 700;
+}
+.astat-k {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.guest {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 8px 0;
+  border-top: 1px solid var(--hairline);
+  font-size: 12.5px;
+}
+
+.covpick {
+  width: 100%;
+  height: 110px;
+  border: 1.5px dashed var(--hairline);
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--faint);
+  font-size: 12.5px;
+  font-family: var(--sans);
+  background-size: cover;
+  background-position: center;
+}
+.covpick:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.covpick.has-image {
+  border-style: solid;
+  color: transparent;
+}
