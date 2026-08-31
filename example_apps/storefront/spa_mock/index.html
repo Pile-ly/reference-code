@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Rock Boxing Gym — interactive mock</title>
+    <script>
+      // Dark-first (the gym look); honour a saved override. Runs before first
+      // paint so there is no flash of the wrong theme.
+      (function () {
+        var theme = "dark";
+        try {
+          var saved = localStorage.getItem("storefront_theme");
+          if (saved === "light" || saved === "dark") theme = saved;
+        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

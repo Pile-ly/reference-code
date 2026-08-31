@@ -1,0 +1,24 @@
+{
+  "name": "pilely_npm_packages",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "core",
+    "simple-db",
+    "simple-blob",
+    "simple-group",
+    "simple-email",
+    "create-pilely-app"
+  ],
+  "scripts": {
+    "build": "npm run build -w @pilely/core && npm run build -w @pilely/simple-db -w @pilely/simple-blob -w @pilely/simple-group -w @pilely/simple-email",
+    "typecheck": "npm run typecheck -w @pilely/core && npm run typecheck -w @pilely/simple-db -w @pilely/simple-blob -w @pilely/simple-group -w @pilely/simple-email",
+    "test": "vitest run",
+    "clean": "rm -rf core/dist simple-db/dist simple-blob/dist simple-group/dist simple-email/dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}

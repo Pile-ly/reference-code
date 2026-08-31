@@ -1,0 +1,82 @@
+/* The four looks. Each is a block of real per-element rules, not a set of
+   variables: a look is allowed its own weights, borders, radii and font,
+   which is what gives Bold its heavy green frames and Classic its hairline
+   rules. `body.bg-<id>` is the backdrop the device sits on; `.<id>` is the
+   screen itself.
+
+   Editing this file changes the look-picker for every Pilely app. */
+
+/* ---------- the backdrop behind the devices --------------------------- */
+body.bg-t-clean { background: #e9e9e9; }
+body.bg-t-bold { background: #dcfce7; }
+body.bg-t-classic { background: #efe9db; }
+body.bg-t-playful { background: #fbe3f1; }
+
+/* ---------- clean & minimal ------------------------------------------- */
+.t-clean { background: #fff; color: #1a1a1a; }
+.t-clean .stat { background: #f6f6f6; }
+.t-clean .list li { background: #fff; border: 1px solid #ececec; }
+.t-clean .list li.flagged { border-inline-start: 3px solid #16a34a; }
+.t-clean .chip { background: #111; color: #fff; }
+.t-clean .chip.ghost { background: transparent; color: #999; border: 1px solid #e5e5e5; }
+.t-clean .cta { background: #1a1a1a; color: #fff; }
+.t-clean .log li { border: 1px solid #ececec; }
+.t-clean .field input { background: #fff; border-color: #e0e0e0; }
+.t-clean .choices .chip { background: #f3f3f3; color: #333; }
+.t-clean .choices .chip.on { background: #111; color: #fff; }
+
+/* ---------- bold & colorful ------------------------------------------- */
+.t-bold { background: #f0fdf4; color: #14532d; font-weight: 600; }
+.t-bold h1, .t-bold .list-text b, .t-bold b { font-weight: 900; }
+.t-bold .stat { background: #16a34a; color: #fff; border-radius: 14px; }
+.t-bold .list li { background: #fff; border: 3px solid #16a34a; border-radius: 16px; }
+.t-bold .list li.flagged { border-color: #facc15; background: #fefce8; }
+.t-bold .chip { background: #facc15; color: #422006; font-weight: 800; }
+.t-bold .chip.ghost { background: #dcfce7; color: #166534; }
+.t-bold .cta { background: #16a34a; color: #fff; border-radius: 16px; font-weight: 800; }
+.t-bold .log li { background: #fff; border: 3px solid #16a34a; border-radius: 16px; }
+.t-bold .field input { background: #fff; border: 3px solid #16a34a; border-radius: 14px; font-weight: 600; }
+.t-bold .choices .chip { background: #dcfce7; color: #166534; }
+.t-bold .choices .chip.on { background: #facc15; color: #422006; }
+
+/* ---------- classic & serious ----------------------------------------- */
+.t-classic { background: #faf7f0; color: #2b2a26; font-family: Georgia, "Times New Roman", serif; }
+.t-classic h1 { font-weight: 400; letter-spacing: .5px; }
+.t-classic .stat { background: transparent; border: 1px solid #ddd6c8; border-radius: 3px; }
+.t-classic .list li {
+  background: transparent; border: 0; border-bottom: 1px solid #ddd6c8;
+  border-radius: 0; padding-inline: 2px;
+}
+.t-classic .list li.flagged .list-text span { color: #8a6d1d; font-style: italic; }
+.t-classic .chip {
+  background: transparent; border: 1px solid #4d5a3f; color: #4d5a3f; border-radius: 3px;
+  text-transform: uppercase; letter-spacing: 1px; font-size: 9.5px;
+}
+.t-classic .chip.ghost { border-color: #c8c0ad; color: #a39b85; }
+.t-classic .cta { background: #4d5a3f; color: #f5f2e9; border-radius: 3px; letter-spacing: 1px; }
+.t-classic .log li {
+  background: transparent; border: 0; border-bottom: 1px solid #ddd6c8;
+  border-radius: 0; padding-inline: 2px;
+}
+.t-classic .field input { background: #fff; border: 1px solid #c8c0ad; border-radius: 3px; }
+.t-classic .choices .chip.on { background: #4d5a3f; color: #f5f2e9; border-color: #4d5a3f; }
+
+/* ---------- playful ---------------------------------------------------- */
+.t-playful {
+  background: #fef6fb; color: #50344d;
+  font-family: ui-rounded, "SF Pro Rounded", "Nunito", -apple-system, sans-serif;
+}
+.t-playful .app-head .logo { font-size: 32px; }
+.t-playful .stat { background: #fce7f3; border-radius: 16px; }
+.t-playful .stat:nth-child(2) { background: #e0f2fe; }
+.t-playful .stat:nth-child(3) { background: #fef9c3; }
+.t-playful .list li { background: #fff; border-radius: 18px; box-shadow: 0 3px 0 #f3d6e8; }
+.t-playful .list li.flagged { box-shadow: 0 3px 0 #f9a8d4; }
+.t-playful .list-icon { font-size: 24px; }
+.t-playful .chip { background: #f472b6; color: #fff; }
+.t-playful .chip.ghost { background: #f1f5f9; color: #94a3b8; }
+.t-playful .cta { background: #f472b6; color: #fff; border-radius: 99px; box-shadow: 0 4px 0 #db2777; }
+.t-playful .log li { background: #fff; border-radius: 16px; box-shadow: 0 3px 0 #f3d6e8; }
+.t-playful .field input { background: #fff; border: none; border-radius: 14px; box-shadow: 0 3px 0 #f3d6e8; }
+.t-playful .choices .chip { background: #f1f5f9; color: #64748b; }
+.t-playful .choices .chip.on { background: #f472b6; color: #fff; }

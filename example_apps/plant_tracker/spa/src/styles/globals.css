@@ -1,0 +1,201 @@
+/* Tailwind v4 entry + the tracker's two themes (SPA standard §10: dark AND
+   light are both real; first paint follows the device via the pre-paint
+   bootstrap in index.html, the nav toggle persists an override). All
+   component color comes from these variables — never a literal — so both
+   themes stay complete by construction.
+
+   Look: a calm, botanical plant journal — soft sage light / deep green-black
+   dark, a leaf-green accent, water-blue for every watering action, and
+   generative plant portraits (components/PlantArt.tsx) wherever a plant has
+   no photo. */
+@import "tailwindcss";
+
+:root {
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", sans-serif;
+  --radius: 16px;
+  --ease: cubic-bezier(0.22, 0.7, 0.24, 1);
+
+  /* SPA standard §9/§9a: top clearance for the Pilely mobile app's floating
+     chrome. 0 in a plain browser; inside the app the index.html bootstrap
+     tags <html> with .pilely-in-app (and publishes --pilely-safe-top). */
+  --pilely-top-clearance: 0px;
+}
+:root.pilely-in-app {
+  --pilely-top-clearance: var(--pilely-safe-top, calc(env(safe-area-inset-top, 24px) + 56px));
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page: #eef3e8;          /* the page + nav ground (soft sage) */
+  --paper: #ffffff;         /* cards */
+  --canvas: #eaf0e4;        /* stat tiles / inset surfaces */
+  --accent: #2f8f52;        /* green — plants, add actions */
+  --accent-2: #43b06a;
+  --accent-soft: rgba(47, 143, 82, 0.12);
+  --water: #3f86c9;         /* blue — every watering action */
+  --water-soft: rgba(63, 134, 201, 0.12);
+  --ink: #1a2a1d;
+  --muted: #5c6b58;
+  --faint: #93a08d;
+  --hairline: rgba(26, 42, 29, 0.10);
+  --hairline-strong: rgba(26, 42, 29, 0.18);
+  --danger: #c34a37;
+  --on-accent: #ffffff;
+  --on-water: #ffffff;
+  --on-ink: #eef3e8;        /* text on the dark toast pill */
+  --toast-undo: #7ab8f5;
+  --art-top: #eef4e6;
+  --art-bot: #e0ead7;
+  --shadow-sm: 0 1px 2px rgba(26, 42, 29, 0.06);
+  --shadow: 0 20px 46px -22px rgba(26, 42, 29, 0.28);
+  --ring: rgba(47, 143, 82, 0.28);
+  --tint-0: #d8e6cf;
+  --tint-1: #e6e0cf;
+  --tint-2: #cfe0e6;
+  --tint-3: #e2d3de;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0e130e;
+  --paper: #161d15;
+  --canvas: #1e261c;
+  --accent: #5fbf83;
+  --accent-2: #74d195;
+  --accent-soft: rgba(95, 191, 131, 0.15);
+  --water: #6fa8e0;
+  --water-soft: rgba(111, 168, 224, 0.14);
+  --ink: #e8f0e4;
+  --muted: #9db09a;
+  --faint: #63725e;
+  --hairline: rgba(255, 255, 255, 0.09);
+  --hairline-strong: rgba(255, 255, 255, 0.17);
+  --danger: #f0806f;
+  --on-accent: #10210f;
+  --on-water: #0e141b;
+  --on-ink: #101710;
+  --toast-undo: #6fa8e0;
+  --art-top: #1a221a;
+  --art-bot: #131a13;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 22px 55px -24px rgba(0, 0, 0, 0.7);
+  --ring: rgba(95, 191, 131, 0.35);
+  --tint-0: #2b3626;
+  --tint-1: #37301f;
+  --tint-2: #223037;
+  --tint-3: #34222c;
+}
+
+body { background: var(--page); color: var(--ink); font-family: var(--sans); }
+h1, h2, h3 { letter-spacing: -0.02em; }
+
+.app-nav {
+  padding-top: var(--pilely-top-clearance);
+  background: color-mix(in srgb, var(--page) 84%, transparent);
+  backdrop-filter: saturate(1.3) blur(14px);
+  -webkit-backdrop-filter: saturate(1.3) blur(14px);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.brand-mark {
+  width: 30px; height: 30px; border-radius: 10px; flex: none;
+  display: grid; place-items: center;
+  background: linear-gradient(140deg, var(--accent), var(--accent-2));
+  color: #fff; box-shadow: 0 6px 15px -5px var(--accent);
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border: 1px solid transparent; background: transparent; color: var(--ink);
+  border-radius: 999px; padding: 8px 16px; font-size: 13.5px; font-weight: 650;
+  cursor: pointer; font-family: var(--sans); white-space: nowrap;
+  transition: transform 0.12s var(--ease), background-color 0.18s var(--ease), border-color 0.18s var(--ease), opacity 0.18s var(--ease);
+}
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btn-ghost { border-color: var(--hairline-strong); }
+.btn-ghost:hover:not(:disabled) { border-color: var(--ink); }
+.btn-accent { background: linear-gradient(140deg, var(--accent), var(--accent-2)); border-color: transparent; color: var(--on-accent); box-shadow: 0 10px 24px -14px var(--accent); }
+.btn-accent:hover:not(:disabled) { transform: translateY(-1px); }
+.btn-water { background: var(--water); border-color: var(--water); color: var(--on-water); }
+
+.mini-btn {
+  border: 1px solid var(--hairline); background: transparent; border-radius: 9px;
+  padding: 5px 10px; font-size: 12px; cursor: pointer; color: var(--muted);
+  display: inline-flex; align-items: center; gap: 5px;
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+.mini-btn:hover { border-color: var(--hairline-strong); color: var(--ink); }
+.mini-btn-danger:hover { border-color: var(--danger); color: var(--danger); }
+
+/* The card's one-tap Water button. */
+.waterbtn {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 5px;
+  border: none; border-radius: 10px; background: var(--water-soft); color: var(--water);
+  font-size: 12.5px; font-weight: 650; font-family: var(--sans); padding: 8px 0; cursor: pointer;
+  transition: background-color 0.16s var(--ease), color 0.16s var(--ease), transform 0.12s var(--ease);
+}
+.waterbtn:hover:not(:disabled) { background: var(--water); color: var(--on-water); }
+.waterbtn:active { transform: scale(0.97); }
+.waterbtn:disabled { opacity: 0.5; cursor: default; }
+
+/* The plant page's primary CTA. */
+.waternow {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 7px;
+  border: none; border-radius: 14px; background: var(--water); color: var(--on-water);
+  font-size: 15px; font-weight: 650; font-family: var(--sans); padding: 13px 0; cursor: pointer;
+  box-shadow: 0 12px 26px -14px var(--water);
+  transition: transform 0.12s var(--ease);
+}
+.waternow:hover { transform: translateY(-1px); }
+.waternow:active { transform: scale(0.98); }
+
+/* White pill buttons over the hero (photo or illustration) — frosted so they
+   read on both. */
+.hero-pill {
+  border: none; border-radius: 999px; background: rgba(255, 255, 255, 0.86);
+  color: #1c1f1a; font-size: 11.5px; font-weight: 600; font-family: var(--sans);
+  padding: 6px 12px; cursor: pointer; backdrop-filter: blur(4px);
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.hero-pill:hover { background: #fff; }
+
+.dashed-pick {
+  border: 1.5px dashed var(--hairline-strong); color: var(--faint); cursor: pointer;
+  background: transparent; font-family: var(--sans);
+  transition: border-color 0.16s var(--ease), color 0.16s var(--ease), background-color 0.16s var(--ease);
+}
+.dashed-pick:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+.field {
+  width: 100%; border: 1px solid var(--hairline); border-radius: 11px;
+  background: var(--paper); color: var(--ink); font-family: var(--sans); outline: none;
+  transition: border-color 0.16s var(--ease), box-shadow 0.16s var(--ease);
+}
+.field:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--ring); }
+.field-water:focus { border-color: var(--water); box-shadow: 0 0 0 4px var(--water-soft); }
+
+/* ── Generative plant portraits ── */
+.art-frame { position: relative; overflow: hidden; background: linear-gradient(180deg, var(--art-top), var(--art-bot)); }
+.plant-art { width: 100%; height: 100%; display: block; }
+
+/* ── Cards ── */
+.plant-card {
+  overflow: hidden; border-radius: var(--radius); border: 1px solid var(--hairline);
+  background: var(--paper);
+  transition: transform 0.18s var(--ease), border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+.plant-card:hover { transform: translateY(-3px); border-color: var(--hairline-strong); box-shadow: var(--shadow); }
+
+/* Plant page hero (rounded card, photo or illustration). */
+.plant-hero { position: relative; overflow: hidden; border-radius: var(--radius); box-shadow: var(--shadow-sm); aspect-ratio: 16 / 9; background: linear-gradient(180deg, var(--art-top), var(--art-bot)); }
+.plant-title h1 { font-size: 24px; font-weight: 780; }
+.plant-title p { color: var(--muted); font-size: 13px; margin-top: 3px; }
+
+/* ── Toast (dark pill, light text) ── */
+.toast-pill { background: var(--ink); color: var(--on-ink); box-shadow: var(--shadow); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

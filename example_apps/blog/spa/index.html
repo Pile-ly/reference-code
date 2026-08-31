@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Theme bootstrap (standards/spa §10): decide dark/light BEFORE first
+         paint so there is no flash of the wrong theme. The in-app toggle
+         persists to localStorage; absent a stored choice we follow the
+         device. Classic inline script — Vite passes it through verbatim. -->
+    <script>
+      (function () {
+        var stored = null;
+        try { stored = localStorage.getItem("blog_theme"); } catch (e) {}
+        var theme = stored === "dark" || stored === "light"
+          ? stored
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <!-- pilely §9a bootstrap (standards/spa): inside the Pilely app the
+         WebView injects window.__PILELY_APP__ before any script runs. It
+         publishes the exact top clearance for the app's floating chrome as
+         --pilely-safe-top and tags <html> as in-app; CSS keeps the §9
+         universal fallback when the global is absent. In a plain browser
+         (no global) there is NO clearance — that band would just be an
+         empty strip. -->
+    <script>
+      (function () {
+        var app = window.__PILELY_APP__;
+        if (app && app.v >= 1) {
+          document.documentElement.classList.add("pilely-in-app");
+          if (Number.isFinite(app.safeAreaTop)) {
+            document.documentElement.style.setProperty(
+              "--pilely-safe-top", (app.safeAreaTop + 56) + "px");
+          }
+        }
+      })();
+    </script>
+    <!-- This app's id, so the platform client knows what to mint for.
+         REQUIRED STEP when you copy this app: replace the placeholder with
+         the real `pile_id` that /skill/app_management/register returned.
+         A bundle shipped with the placeholder has broken sign-in until
+         rebuilt and re-uploaded (see build_instruction.md).
+         ORDER MATTERS: this meta MUST sit ABOVE the client.js script tag.
+         The client runs the boot-time anonymous mint synchronously while
+         it parses, and reads this tag to know which app to mint for — with
+         the tag below the script, a public app's signed-out visitors get no
+         anonymous credential, every read 401s, and the first data call
+         bounces them to the login page. -->
+    <meta name="pilely-app" content="REPLACE_WITH_YOUR_PILE_ID" />
+    <!-- The platform auth runtime (standards/spa §0). MANDATORY in every
+         neoApp — it handles the whole sign-in dance (PKCE, callback, token
+         storage, silent re-mint) and, on a `public` app, quietly holds an
+         anonymous credential so signed-out visitors can read `anon_read`
+         tables. Loaded from the APEX because platform paths (`/~/…`) are
+         apex-only; a cross-origin script here is expected. Classic
+         (non-module) and before the bundle, so `window.pilely` exists by
+         first render. Never reimplement any of this locally. -->
+    <script src="https://pilely.app/~/client.js"></script>
+    <!-- pilely: append ?isAgent=1 to this URL for the agent/markdown view -->
+    <!-- §7a: advertise that markdown view in the DOM too, as a live
+         <link rel="alternate"> for the CURRENT route. This pre-paint
+         script covers the entry URL; the SPA re-points it on every
+         client-side navigation (src/hooks/useAgentAlternateLink.ts) —
+         the platform's Link header only covers the shell fetch itself,
+         which a client-side navigation never repeats. -->
+    <script>
+      (function () {
+        var params = new URLSearchParams(location.search);
+        params.set("isAgent", "1");
+        var link = document.createElement("link");
+        link.id = "pilely-agent-alternate";
+        link.rel = "alternate";
+        link.type = "text/markdown";
+        link.setAttribute("href", location.pathname + "?" + params.toString());
+        document.head.appendChild(link);
+      })();
+    </script>
+    <title>Blog</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

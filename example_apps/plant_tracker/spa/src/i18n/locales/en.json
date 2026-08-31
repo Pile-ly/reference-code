@@ -1,0 +1,93 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong: {{reason}}",
+    "nothingHere": "Nothing here."
+  },
+  "nav": {
+    "signIn": "Login with Pilely",
+    "addPlant": "+ Plant",
+    "signOut": "Sign out",
+    "ownerOnly": "· @{{handle}} only"
+  },
+  "gate": {
+    "lead": "A private plant journal — only its owner can see anything here.",
+    "signIn": "Login with Pilely"
+  },
+  "home": {
+    "emptyLine1": "No plants yet.",
+    "emptyLine2": "Add your first one.",
+    "addPlant": "Add plant",
+    "water": "Water",
+    "watered": "{{name}} watered",
+    "wateredAgo": "watered {{ago}}",
+    "neverWatered": "never watered"
+  },
+  "time": {
+    "today": "today",
+    "yesterday": "yesterday",
+    "daysAgo_one": "{{count}} day ago",
+    "daysAgo_other": "{{count}} days ago"
+  },
+  "plant": {
+    "since_one": "since {{date}} · {{count}} watering",
+    "since_other": "since {{date}} · {{count}} waterings",
+    "changePhoto": "Change photo",
+    "photoChanged": "Photo updated",
+    "delete": "Delete",
+    "confirmDelete": "Delete this plant? Its photo, watering history and history photos are deleted too — this can't be undone.",
+    "deleted": "Plant and its history deleted",
+    "deleteFailed": "Couldn't finish deleting — tap Delete to retry",
+    "missing": "This plant doesn't exist.",
+    "backHome": "Back to all plants",
+    "waterNow": "Water now",
+    "waterHint": "add a photo or note — optional",
+    "download": "Download image",
+    "history": "History",
+    "historyEmpty": "No waterings yet.",
+    "entryConfirm": "Delete this entry? Its photo is deleted too — this can't be undone.",
+    "entryDeleted": "Entry deleted",
+    "entryDelete": "Delete"
+  },
+  "stats": {
+    "lastWatered": "last watered",
+    "waterings": "waterings",
+    "avgGap": "avg gap",
+    "gapDays": "{{count}}d",
+    "none": "—"
+  },
+  "sheet": {
+    "notePlaceholder": "Note — optional",
+    "attach": "+ Photo",
+    "attached": "Photo attached ✓",
+    "cancel": "Cancel",
+    "log": "Log watering",
+    "logged": "Watering logged",
+    "loggedWithPhoto": "Watering logged with photo"
+  },
+  "add": {
+    "heading": "Add a plant",
+    "portraitNote": "No photo? We'll draw a portrait from the name.",
+    "photo": "Take or choose a photo",
+    "nameLabel": "Name",
+    "namePlaceholder": "Monstera",
+    "cancel": "Cancel",
+    "submit": "Add plant",
+    "added": "{{name}} added",
+    "unnamed": "Unnamed plant"
+  },
+  "toast": {
+    "undo": "Undo",
+    "undoFailed": "Couldn't undo"
+  },
+  "photo": {
+    "unreadable": "Couldn't read that photo — try another one",
+    "uploadFailed": "Couldn't upload the photo: {{reason}}"
+  },
+  "footer": {
+    "aiHint": "You can also use this app straight from your AI client — just tell it: \"curl {{origin}}/?isAgent=1\"."
+  },
+  "theme": {
+    "toggleAria": "Toggle dark/light theme"
+  }
+}

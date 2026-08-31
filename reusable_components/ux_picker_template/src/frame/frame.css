@@ -1,0 +1,141 @@
+/* The picker's chrome: the rail the devices sit on, the label above each
+   one, and the floating controls.
+
+   The controls are frosted white pills that sit above whichever look is
+   selected, so the tool reads as one layer and the looks as another. The
+   rail hides its scrollbar and snaps — a visible scrollbar through the
+   middle of the page is the fastest way to make this feel unfinished. */
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #111;
+  transition: background .3s;
+}
+
+/* ---------- the look's name, top right -------------------------------- */
+
+.top {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 5;
+  padding: 14px 18px; display: flex; justify-content: flex-end; align-items: center;
+  pointer-events: none;
+}
+.top .name {
+  font-size: 13px; font-weight: 600;
+  background: rgba(255, 255, 255, .85);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  padding: 6px 14px; border-radius: 99px;
+}
+
+/* ---------- the rail --------------------------------------------------- */
+
+.screens {
+  display: flex; gap: 22px; align-items: flex-start;
+  overflow-x: auto; scroll-snap-type: x proximity;
+  padding: 76px 6vw 190px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.screens::-webkit-scrollbar { display: none; }
+
+.screen { flex: 0 0 min(295px, 82vw); scroll-snap-align: center; }
+.screen:first-child { margin-inline-start: auto; }
+.screen:last-child { margin-inline-end: auto; }
+
+.screen-label { text-align: center; margin-bottom: 10px; }
+.screen-label b {
+  display: inline-block; font-size: 13px;
+  background: rgba(255, 255, 255, .8);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  padding: 5px 14px; border-radius: 99px;
+}
+.screen-label span { display: block; font-size: 11px; color: rgba(0, 0, 0, .45); margin-top: 4px; }
+
+/* The device the screen is shown in. */
+.device { border-radius: 26px; overflow: hidden; box-shadow: 0 18px 50px rgba(0, 0, 0, .2); }
+
+/* Computer width is a reflow, not just a wider box. */
+body.wide .screen { flex-basis: min(640px, 90vw); }
+body.wide .app { max-width: 620px; }
+body.wide .list { display: grid; grid-template-columns: 1fr 1fr; }
+
+/* ---------- floating controls ------------------------------------------ */
+
+/* Sets expectations before the user reads the three screens as a page list. */
+.picker-note {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 122px; z-index: 5;
+  margin: 0; max-width: min(90vw, 540px); text-align: center;
+  font-size: 11.5px; line-height: 1.5; color: #4a4a4a;
+  background: rgba(255, 255, 255, .72);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  padding: 8px 16px; border-radius: 14px;
+  pointer-events: none;
+}
+
+.wt {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 76px; z-index: 5;
+  display: flex; gap: 4px; padding: 5px; border-radius: 99px;
+  background: rgba(255, 255, 255, .72);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.wt button {
+  border: none; background: transparent; font-family: inherit; font-size: 11.5px;
+  padding: 6px 12px; border-radius: 99px; cursor: pointer; color: #555;
+}
+.wt button[aria-pressed="true"] { background: #111; color: #fff; }
+
+.dock {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 18px; z-index: 5;
+  display: flex; gap: 6px; align-items: center; padding: 8px; border-radius: 99px;
+  background: rgba(255, 255, 255, .85);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .18);
+  max-width: 94vw;
+}
+.dock button {
+  border: none; background: transparent; font-family: inherit; font-size: 13px;
+  padding: 9px 15px; border-radius: 99px; cursor: pointer; white-space: nowrap; color: #111;
+}
+.dock button[aria-pressed="true"] { background: #111; color: #fff; }
+.dock .arrow { font-size: 15px; color: #666; padding: 9px 11px; }
+
+.wt button:focus-visible, .dock button:focus-visible, .help-btn:focus-visible {
+  outline: 2px solid #111; outline-offset: 2px;
+}
+
+/* ---------- the ? explainer -------------------------------------------- */
+
+.help-btn {
+  position: fixed; right: 18px; bottom: 18px; z-index: 6;
+  width: 42px; height: 42px; border-radius: 99px; border: none;
+  background: rgba(255, 255, 255, .88);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .18);
+  font-family: inherit; font-size: 17px; font-weight: 600; color: #333; cursor: pointer;
+}
+
+.help-overlay {
+  position: fixed; inset: 0; z-index: 10;
+  background: rgba(17, 17, 17, .5);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.help-card {
+  position: relative;
+  background: #fff; border-radius: 20px; padding: 24px 22px 20px;
+  max-width: 340px; width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .3);
+}
+.help-card h3 { margin: 0 0 12px; font-size: 17px; }
+.help-card p { margin: 0 0 10px; font-size: 13.5px; line-height: 1.6; color: #444; }
+.help-card p:last-of-type { margin-bottom: 0; }
+.help-card .x {
+  position: absolute; top: 12px; right: 12px; border: none; background: #f3f4f6;
+  width: 28px; height: 28px; border-radius: 99px;
+  font-family: inherit; font-size: 13px; color: #666; cursor: pointer;
+}
+.help-card .got-it {
+  width: 100%; margin-top: 16px; border: none; background: #111; color: #fff;
+  padding: 12px; border-radius: 12px; font-family: inherit; font-size: 14px; cursor: pointer;
+}

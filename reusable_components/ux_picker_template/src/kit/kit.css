@@ -1,0 +1,56 @@
+/* The UI kit: the shared structure every screen is built from. It carries
+   only layout and metrics — colour, weight, border and radius belong to the
+   look, which is why a screen composed of these is correct in all four
+   without knowing they exist.
+
+   Add a primitive here when a screen needs a shape that does not exist yet,
+   and give every look a rule for it. Never inline a style in a screen. */
+
+.demo { padding: 8px 0 4px; min-height: 430px; }
+.app { width: 100%; max-width: 340px; margin: 0 auto; padding: 22px 18px; }
+
+.app-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.app-head .logo { font-size: 26px; }
+.app-head h1 { margin: 0; font-size: 20px; }
+.app-head p { margin: 2px 0 0; font-size: 12px; opacity: .65; }
+
+.stats { display: flex; gap: 8px; margin-bottom: 14px; }
+.stat { flex: 1; text-align: center; padding: 9px 4px; border-radius: 8px; }
+.stat b { display: block; font-size: 17px; }
+.stat span { font-size: 10px; opacity: .7; }
+
+.list { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.list li { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 10px; }
+.list-icon { font-size: 20px; }
+.list-text { flex: 1; }
+.list-text b { display: block; font-size: 13.5px; }
+.list-text span { font-size: 11px; opacity: .65; }
+
+.chip { border: none; font-family: inherit; font-size: 11px; padding: 6px 11px; border-radius: 99px; cursor: pointer; }
+.cta { width: 100%; border: none; font-family: inherit; padding: 13px; border-radius: 10px; font-size: 14px; cursor: pointer; }
+
+.crumb { font-size: 12px; opacity: .55; margin-bottom: 10px; }
+
+.hero { text-align: center; margin-bottom: 14px; }
+.hero .big { font-size: 44px; display: block; }
+.hero h1 { margin: 6px 0 0; font-size: 20px; }
+.hero p { margin: 2px 0 0; font-size: 12px; opacity: .65; }
+
+.section-title { font-size: 13px; margin: 16px 0 8px; }
+
+.log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.log li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 12px; border-radius: 10px; font-size: 12.5px;
+}
+.log em { font-style: normal; opacity: .6; font-size: 11.5px; }
+
+.page-title { margin: 0 0 14px; font-size: 20px; }
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 11.5px; opacity: .65; margin-bottom: 5px; }
+.field input {
+  width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid transparent;
+  font-size: 13.5px; font-family: inherit; color: inherit;
+}
+.choices { display: flex; gap: 6px; }
+.choices .chip { font-size: 12px; padding: 8px 12px; }
