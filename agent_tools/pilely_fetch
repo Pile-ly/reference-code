@@ -1,0 +1,235 @@
+#!/usr/bin/env bash
+#
+# The one HTTP call every agent makes: picks the right token by host and
+# sends it. macOS only — it reads tokens through the keychain, the same
+# store pilely_token_store writes to.
+#
+#   Usage:
+#     pilely_fetch GET  <url>
+#     pilely_fetch POST <url> [<json body>] [--as <app-host>]
+#
+# Apex host (pilely.app): sends the login token; a GET path without .md
+# gets .md appended, and a POST gets Accept: application/json.
+#
+# Any other host: sends an app token for that host, cached in the
+# keychain, minted at /~/mint/app_id_token when the cache is empty or
+# expired. --as <app-host> mints for that app instead of for the target
+# host itself, so a simple_* service can be called on the app's behalf.
+#
+# The login token is never sent off the apex host. That is not a runtime
+# check to bypass — the non-apex code path below never reads it at all.
+#
+# Prints the response body and nothing else. Exits 0 on a 2xx response,
+# 4 on 4xx, 5 on 5xx, 1 on anything else (a transport failure, or a
+# status outside those classes).
+
+set -euo pipefail
+
+APEX_HOST=${PILELY_APEX_HOST:-pilely.app}
+BASE_URL="https://$APEX_HOST"
+ACCOUNT_ID_FILE=${PILELY_ACCOUNT_KEYCHAIN_ID_FILE:-./.pilely_account_keychain_id}
+LOGIN_SERVICE=pile.ly
+APP_TOKEN_SERVICE=pile.ly.app_token
+# Margin subtracted from a cached app token's expiry before trusting it,
+# so a token that is about to die is re-minted instead of raced.
+APP_TOKEN_SKEW_MS=30000
+
+die() { printf 'pilely_fetch: %s\n' "$*" >&2; exit 1; }
+
+require_macos() {
+  [[ "$(uname -s)" == Darwin ]] || die 'macOS only: the keychain is the only supported secret store'
+}
+
+require_tools() {
+  local tool
+  for tool in curl security jq; do
+    command -v "$tool" >/dev/null 2>&1 || die "$tool is required"
+  done
+}
+
+now_millis() {
+  # macOS date(1) has no %N; python3 ships with every macOS this targets.
+  python3 -c 'import time; print(int(time.time() * 1000))'
+}
+
+account_email() {
+  [[ -f $ACCOUNT_ID_FILE ]] || die "no account on file: $ACCOUNT_ID_FILE (run pilely_token_store verify-email-code first)"
+  local email
+  email=$(cat "$ACCOUNT_ID_FILE")
+  [[ -n $email ]] || die "$ACCOUNT_ID_FILE is empty"
+  printf '%s' "$email"
+}
+
+keychain_get() {
+  local service=$1 account=$2
+  security find-generic-password -s "$service" -a "$account" -w 2>/dev/null
+}
+
+keychain_set() {
+  local service=$1 account=$2 value=$3
+  security add-generic-password -s "$service" -a "$account" -w "$value" -U >/dev/null 2>&1 \
+    || die "unable to write keychain entry $service/$account"
+}
+
+login_token_for() {
+  local email=$1 token
+  token=$(keychain_get "$LOGIN_SERVICE" "$email") \
+    || die "no login token stored for $email; run pilely_token_store send-email-code and verify-email-code first"
+  printf '%s' "$token"
+}
+
+url_host() {
+  local url=$1 rest
+  rest=${url#*://}
+  rest=${rest%%/*}
+  rest=${rest%%\?*}
+  rest=${rest%%:*}
+  printf '%s' "$rest"
+}
+
+# Appends .md to a GET path that lacks it, before any query string.
+apexify_get_url() {
+  local url=$1 head query
+  case $url in
+    *\?*) head=${url%%\?*}; query="?${url#*\?}" ;;
+    *) head=$url; query='' ;;
+  esac
+  case $head in
+    *.md) printf '%s%s' "$head" "$query" ;;
+    *) printf '%s.md%s' "$head" "$query" ;;
+  esac
+}
+
+cached_app_token() {
+  local email=$1 mint_target=$2 raw expiry token now
+  raw=$(keychain_get "$APP_TOKEN_SERVICE" "$email:$mint_target") || return 1
+  expiry=${raw%%:*}
+  token=${raw#*:}
+  [[ $expiry =~ ^[0-9]+$ && -n $token ]] || return 1
+  now=$(now_millis)
+  (( expiry - APP_TOKEN_SKEW_MS > now )) || return 1
+  printf '%s' "$token"
+}
+
+# The one platform route this script knows besides the fetch itself.
+mint_app_token() {
+  local email=$1 mint_target=$2 login_token out http_code body token expiry
+  # `die` inside a command substitution exits only that subshell, and bash
+  # does not carry `-e` into one, so the failure has to be caught here or
+  # the mint goes out with an empty bearer and a second, misleading error.
+  login_token=$(login_token_for "$email") || exit 1
+  out=$(mktemp "${TMPDIR:-/tmp}/pilely_fetch.XXXXXX") || die 'unable to create response file'
+  body=$(jq -cn --arg target "$mint_target" '{target: $target}')
+  http_code=$(curl -sS --max-time 15 -o "$out" -w '%{http_code}' \
+    -X POST "$BASE_URL/~/mint/app_id_token" \
+    -H 'Content-Type: application/json' \
+    -H 'Accept: application/json' \
+    -H "Authorization: Bearer $login_token" \
+    --data "$body") || { rm -f "$out"; die "mint request for $mint_target failed"; }
+  if [[ $http_code -lt 200 || $http_code -ge 300 ]]; then
+    local reason
+    reason=$(jq -r '.error // .code // "mint_failed"' "$out" 2>/dev/null || printf 'mint_failed')
+    rm -f "$out"
+    die "unable to mint an app token for $mint_target: $reason (http $http_code)"
+  fi
+  token=$(jq -r '.token // empty' "$out")
+  expiry=$(jq -r '.expires_at_millis // empty' "$out")
+  rm -f "$out"
+  [[ -n $token && -n $expiry ]] || die "mint response for $mint_target carried no token"
+  keychain_set "$APP_TOKEN_SERVICE" "$email:$mint_target" "$expiry:$token"
+  printf '%s' "$token"
+}
+
+app_token_for() {
+  local email=$1 mint_target=$2 token
+  token=$(cached_app_token "$email" "$mint_target") && { printf '%s' "$token"; return 0; }
+  mint_app_token "$email" "$mint_target"
+}
+
+request() {
+  local method=$1 url=$2 json_body=$3 as_host=$4
+  local email host out http_code
+  email=$(account_email)
+  host=$(url_host "$url")
+  [[ -n $host ]] || die "not a URL: $url"
+
+  local -a headers=()
+  local send_url=$url
+
+  if [[ $host == "$APEX_HOST" ]]; then
+    [[ -z $as_host ]] || die '--as only applies off the apex host'
+    local token
+    token=$(login_token_for "$email") || exit 1
+    printf 'pilely_fetch: sending login token to %s\n' "$host" >&2
+    headers+=(-H "Authorization: Bearer $token")
+    if [[ $method == GET ]]; then
+      send_url=$(apexify_get_url "$url")
+    else
+      headers+=(-H 'Accept: application/json')
+    fi
+  else
+    local mint_target=${as_host:-$host}
+    local token
+    token=$(app_token_for "$email" "$mint_target") || exit 1
+    printf 'pilely_fetch: sending app token minted for %s to %s\n' "$mint_target" "$host" >&2
+    headers+=(-H "Authorization: Bearer $token")
+  fi
+
+  out=$(mktemp "${TMPDIR:-/tmp}/pilely_fetch.XXXXXX") || die 'unable to create response file'
+  if [[ $method == GET ]]; then
+    http_code=$(curl -sS --max-time 15 -o "$out" -w '%{http_code}' "${headers[@]}" "$send_url") \
+      || { rm -f "$out"; die 'request failed'; }
+  else
+    headers+=(-H 'Content-Type: application/json')
+    http_code=$(curl -sS --max-time 15 -o "$out" -w '%{http_code}' -X POST "${headers[@]}" \
+      --data "${json_body:-{\}}" "$send_url") \
+      || { rm -f "$out"; die 'request failed'; }
+  fi
+
+  cat "$out"
+  rm -f "$out"
+
+  case $http_code in
+    2??) exit 0 ;;
+    4??) exit 4 ;;
+    5??) exit 5 ;;
+    *) exit 1 ;;
+  esac
+}
+
+require_macos
+require_tools
+
+[[ $# -ge 2 ]] || die 'usage: pilely_fetch {GET <url>|POST <url> [<json body>] [--as <app-host>]}'
+method=$1
+url=$2
+shift 2
+
+json_body=''
+as_host=''
+case $method in
+  GET)
+    [[ $# -eq 0 ]] || die 'usage: pilely_fetch GET <url>'
+    ;;
+  POST)
+    while [[ $# -gt 0 ]]; do
+      case $1 in
+        --as)
+          [[ $# -ge 2 ]] || die 'usage: pilely_fetch POST <url> [<json body>] [--as <app-host>]'
+          as_host=$2
+          shift 2
+          ;;
+        *)
+          [[ -z $json_body ]] || die 'usage: pilely_fetch POST <url> [<json body>] [--as <app-host>]'
+          json_body=$1
+          shift
+          ;;
+      esac
+    done
+    ;;
+  *)
+    die 'usage: pilely_fetch {GET <url>|POST <url> [<json body>] [--as <app-host>]}'
+    ;;
+esac
+
+request "$method" "$url" "$json_body" "$as_host"

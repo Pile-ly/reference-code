@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- neoApp icon (standards/app_icon): fixed name public/icon.svg lands at
+       the bundle root, so it is always addressable at <label>.pilely.app/icon.svg.
+       The UX spec's leaf mark on the tracker's green. -->
+  <rect x="4" y="4" width="56" height="56" rx="12" fill="#3d7a3d"/>
+  <g transform="translate(8 8) scale(2)" fill="#ffffff">
+    <path d="M12 21c0-6 2-11 8-14-1 7-3 12-8 14zM12 21c0-5-1.5-9-6-11 .7 5.5 2.5 9.5 6 11z"/>
+  </g>
+</svg>

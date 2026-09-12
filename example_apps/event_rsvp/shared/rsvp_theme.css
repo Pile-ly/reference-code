@@ -1,0 +1,24 @@
+/* Shared light-theme contract for the deployable RSVP app and its mock. */
+:root {
+  --rsvp-accent: #e25c4a;
+  --rsvp-accent-soft: #fdeeea;
+  --rsvp-canvas: #faf7f2;
+  --rsvp-paper: #ffffff;
+  --rsvp-ink: #201d1a;
+  --rsvp-body: #453f38;
+  --rsvp-muted: #6f6a63;
+  --rsvp-faint: #a09a91;
+  --rsvp-hairline: #ece7df;
+  --rsvp-going: #1d7a4f;
+  --rsvp-going-soft: #e3f3ea;
+  --rsvp-cant: #b3392e;
+  --rsvp-cant-soft: #fbe9e7;
+  --rsvp-display: Georgia, "Times New Roman", ui-serif, serif;
+}
+
+.rsvp-banner { position: relative; overflow: hidden; isolation: isolate; color: #fff; }
+.rsvp-banner__scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(26, 20, 17, .78), rgba(26, 20, 17, .34) 58%, rgba(26, 20, 17, .05)); }
+.rsvp-banner__copy { position: relative; z-index: 1; }
+.rsvp-banner__eyebrow { margin: 0 0 7px; color: #ffe5b1; font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.rsvp-banner__title { margin: 0; font-family: var(--rsvp-display); font-size: clamp(28px, 5vw, 42px); font-weight: 700; letter-spacing: -.035em; line-height: 1.04; }
+.rsvp-card-surface { background: var(--rsvp-paper); border: 1px solid var(--rsvp-hairline); border-radius: 16px; }

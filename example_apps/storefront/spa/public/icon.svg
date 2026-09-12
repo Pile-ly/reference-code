@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- neoApp icon (standards/app_icon): fixed name public/icon.svg lands at
+       the bundle root, so it is always addressable at <label>.pilely.app/icon.svg.
+       A simple boxing-glove glyph for the gym storefront. -->
+  <rect x="4" y="4" width="56" height="56" rx="12" fill="#e04a1f"/>
+  <!-- glove body (fist mitt, slight forward lean) -->
+  <path d="M19 24 a13 13 0 0 1 13 -13 h5 a12 12 0 0 1 12 12 v7 a15 15 0 0 1 -15 15 h-3 a12 12 0 0 1 -12 -12 z" fill="#ffffff"/>
+  <!-- thumb -->
+  <path d="M19 30 a6 6 0 0 1 6 -6 h2 v11 h-2 a6 6 0 0 1 -6 -5 z" fill="#ffffff" opacity="0.8"/>
+  <!-- cuff -->
+  <rect x="27" y="47" width="16" height="7" rx="3" fill="#ffffff" opacity="0.85"/>
+</svg>

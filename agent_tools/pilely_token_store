@@ -1,0 +1,190 @@
+#!/usr/bin/env bash
+#
+# The login flow, and the only script on the platform that reads or writes
+# the macOS keychain. macOS only.
+#
+#   Usage:
+#     pilely_token_store send-email-code <email>
+#     pilely_token_store verify-email-code <email> <code>
+#     pilely_token_store status
+#
+# Keychain layout (fixed, do not change without updating pilely_fetch too):
+#   service pile.ly            account <email>            value <jwt>
+#   service pile.ly.app_token  account <email>:<app-host>  value <expiry_millis>:<token>
+#
+# The login token never leaves this script in cleartext: verify-email-code
+# writes it straight to the keychain and never prints it, and no other
+# command here reads it back out for display.
+
+set -euo pipefail
+
+APEX_HOST=${PILELY_APEX_HOST:-pilely.app}
+BASE_URL="https://$APEX_HOST"
+ACCOUNT_ID_FILE=${PILELY_ACCOUNT_KEYCHAIN_ID_FILE:-./.pilely_account_keychain_id}
+LOGIN_SERVICE=pile.ly
+
+die() { printf 'pilely_token_store: %s\n' "$*" >&2; exit 1; }
+
+require_macos() {
+  [[ "$(uname -s)" == Darwin ]] || die 'macOS only: the keychain is the only supported secret store'
+}
+
+require_tools() {
+  local tool
+  for tool in curl security jq; do
+    command -v "$tool" >/dev/null 2>&1 || die "$tool is required"
+  done
+}
+
+valid_email() {
+  [[ $1 == *@*.* && $1 != *' '* ]]
+}
+
+keychain_set() {
+  local service=$1 account=$2 value=$3
+  security add-generic-password -s "$service" -a "$account" -w "$value" -U >/dev/null 2>&1 \
+    || die "unable to write keychain entry $service/$account"
+}
+
+keychain_get() {
+  local service=$1 account=$2
+  security find-generic-password -s "$service" -a "$account" -w 2>/dev/null
+}
+
+login_token_for() {
+  local email=$1 token
+  token=$(keychain_get "$LOGIN_SERVICE" "$email") || die "no login token stored for $email; run send-email-code and verify-email-code first"
+  printf '%s' "$token"
+}
+
+# Extracts the JWT from the markdown success body, which carries it inside
+# the one fenced code block that follows the "Your auth JWT token" line.
+# The JSON body deliberately never carries it, so this is the only place
+# the token can come from.
+extract_jwt() {
+  awk '
+    /Your auth JWT token/ { want = 1; next }
+    want && /^```$/ { if (fence == 0) { fence = 1; next } else { exit } }
+    want && fence == 1 { print; exit }
+  '
+}
+
+http_post() {
+  # http_post <path> <content-type> <accept> <body> <out-file> [bearer]
+  local path=$1 content_type=$2 accept=$3 body=$4 out=$5 bearer=${6:-}
+  local -a headers=(-H "Content-Type: $content_type" -H "Accept: $accept")
+  [[ -n $bearer ]] && headers+=(-H "Authorization: Bearer $bearer")
+  curl -sS --max-time 15 -o "$out" -w '%{http_code}' \
+    -X POST "$BASE_URL$path" "${headers[@]}" --data "$body"
+}
+
+send_email_code() {
+  local email=$1
+  valid_email "$email" || die "not an email: $email"
+  local body http_code out
+  out=$(mktemp "${TMPDIR:-/tmp}/pilely_token_store.XXXXXX") || die 'unable to create response file'
+  body=$(jq -cn --arg email "$email" '{email: $email}')
+  http_code=$(http_post /~/login application/json application/json "$body" "$out") || { rm -f "$out"; die 'request to /~/login failed'; }
+  if [[ $http_code -ge 200 && $http_code -lt 300 ]]; then
+    rm -f "$out"
+    printf 'ok\n'
+    return 0
+  fi
+  local code
+  code=$(jq -r '.code // "unknown_error"' "$out" 2>/dev/null || printf 'unknown_error')
+  rm -f "$out"
+  printf '%s\n' "$code"
+  return 1
+}
+
+# The markdown response carries no machine-readable failure code (unlike
+# the JSON twin), so a failed verify is classified from the HTTP status
+# class instead of parsed out of the prose.
+failure_code_for_status() {
+  case $1 in
+    400) printf 'bad_request' ;;
+    401) printf 'unauthorized' ;;
+    429) printf 'rate_limited' ;;
+    5??) printf 'internal_error' ;;
+    *) printf 'http_%s' "$1" ;;
+  esac
+}
+
+fetch_handle() {
+  local token=$1 out http_code handle
+  out=$(mktemp "${TMPDIR:-/tmp}/pilely_token_store.XXXXXX") || die 'unable to create response file'
+  http_code=$(http_post /~/me application/json application/json '' "$out" "$token") || { rm -f "$out"; die 'request to /~/me failed'; }
+  if [[ $http_code -lt 200 || $http_code -ge 300 ]]; then
+    rm -f "$out"
+    die "/~/me rejected the freshly stored token (http $http_code)"
+  fi
+  handle=$(jq -r '.user_handle // empty' "$out")
+  rm -f "$out"
+  [[ -n $handle ]] || die '/~/me answered without a user_handle'
+  printf '%s' "$handle"
+}
+
+verify_email_code() {
+  local email=$1 code=$2
+  valid_email "$email" || die "not an email: $email"
+  local body out http_code
+  out=$(mktemp "${TMPDIR:-/tmp}/pilely_token_store.XXXXXX") || die 'unable to create response file'
+  body=$(jq -cn --arg email "$email" --arg code "$code" '{email: $email, auth_code: $code}')
+  # Content-Type stays application/json — the request body shape never
+  # changes. It is the Accept header that must NOT ask for JSON: the
+  # markdown body is the only one that embeds the JWT.
+  http_code=$(http_post /~/login/verify_auth_code application/json text/plain "$body" "$out") \
+    || { rm -f "$out"; die 'request to /~/login/verify_auth_code failed'; }
+  if [[ $http_code -lt 200 || $http_code -ge 300 ]]; then
+    local failure
+    failure=$(failure_code_for_status "$http_code")
+    rm -f "$out"
+    printf '%s\n' "$failure"
+    return 1
+  fi
+  local token
+  token=$(extract_jwt < "$out")
+  rm -f "$out"
+  [[ -n $token ]] || die 'verify succeeded but no token was found in the response'
+  keychain_set "$LOGIN_SERVICE" "$email" "$token"
+  printf '%s\n' "$email" > "$ACCOUNT_ID_FILE"
+  fetch_handle "$token"
+  printf '\n'
+}
+
+status() {
+  [[ -f $ACCOUNT_ID_FILE ]] || { printf 'no account stored\n'; return 1; }
+  local email token out http_code
+  email=$(cat "$ACCOUNT_ID_FILE")
+  token=$(keychain_get "$LOGIN_SERVICE" "$email") || { printf '%s: no token stored\n' "$email"; return 1; }
+  out=$(mktemp "${TMPDIR:-/tmp}/pilely_token_store.XXXXXX") || die 'unable to create response file'
+  http_code=$(http_post /~/me application/json application/json '' "$out" "$token") || { rm -f "$out"; die 'request to /~/me failed'; }
+  rm -f "$out"
+  if [[ $http_code -ge 200 && $http_code -lt 300 ]]; then
+    printf '%s: valid\n' "$email"
+    return 0
+  fi
+  printf '%s: invalid (http %s)\n' "$email" "$http_code"
+  return 1
+}
+
+require_macos
+require_tools
+
+case ${1:-} in
+  send-email-code)
+    [[ $# -eq 2 ]] || die 'usage: pilely_token_store send-email-code <email>'
+    send_email_code "$2"
+    ;;
+  verify-email-code)
+    [[ $# -eq 3 ]] || die 'usage: pilely_token_store verify-email-code <email> <code>'
+    verify_email_code "$2" "$3"
+    ;;
+  status)
+    [[ $# -eq 1 ]] || die 'usage: pilely_token_store status'
+    status
+    ;;
+  *)
+    die 'usage: pilely_token_store {send-email-code <email>|verify-email-code <email> <code>|status}'
+    ;;
+esac
