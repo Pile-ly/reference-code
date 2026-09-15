@@ -1,0 +1,36 @@
+{
+  "name": "@pilely/create-pilely-app",
+  "version": "0.1.1",
+  "description": "Scaffolds a pilely.app neoApp.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-pilely-app": "index.js"
+  },
+  "files": [
+    "index.js",
+    "src/cli.js",
+    "src/generate_base.js",
+    "src/generate_sign_in.js",
+    "src/help.js",
+    "src/prompt.js",
+    "src/schema.js",
+    "src/validate.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pile-ly/reference-code.git",
+    "directory": "npm/create-pilely-app"
+  }
+}
