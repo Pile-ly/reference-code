@@ -1,0 +1,17 @@
+{
+  "name": "pilely-agent-tools",
+  "private": true,
+  "type": "module",
+  "description": "Helper tools an AI agent runs against pilely.app. TypeScript source run directly by Node; no build, no runtime dependencies.",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "test": "node --test \"tests/*.test.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.8.0"
+  }
+}

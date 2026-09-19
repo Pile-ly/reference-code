@@ -1,0 +1,25 @@
+{
+  "picker": {
+    "note": "This is only about style — the look and feel of your app. It isn't every page we'll build. Want to see a particular page or feature? Just tell me.",
+    "width": {
+      "label": "Preview width",
+      "phone": "📱 Phone",
+      "computer": "💻 Computer"
+    },
+    "looks": {
+      "label": "Looks",
+      "previous": "Previous look",
+      "next": "Next look"
+    },
+    "help": {
+      "open": "What is this page?",
+      "close": "Close",
+      "title": "What is this page?",
+      "p1": "You're choosing how your app will <1>look</1>. This page shows an example app in a few different styles — the screens and content are just samples, not your real app.",
+      "p2": "<0>Flip through the looks</0> with the buttons at the bottom, and use the phone and computer buttons to see how each one feels at both widths.",
+      "p3": "When one feels right, just tell me its name — like <1>\"I like Bold\"</1> — and I'll build your app in that style.",
+      "p4": "Nothing has to be perfect here. You can also ask me to <1>tweak a look</1> — <3>\"Playful, but with blue instead of pink\"</3> — or to <5>show you more choices</5> if none of these feel right.",
+      "gotIt": "Got it"
+    }
+  }
+}
