@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- neoApp icon (standards/app_icon): fixed name public/icon.svg lands at
+       the bundle root, so it is always addressable at <label>.pilely.app/icon.svg.
+       The UX spec's setting-sun mark on the club's terracotta. -->
+  <rect x="4" y="4" width="56" height="56" rx="12" fill="#e25c4a"/>
+  <!-- the sun, half above the table line -->
+  <circle cx="32" cy="30" r="11" fill="#ffffff"/>
+  <!-- rays -->
+  <g stroke="#ffffff" stroke-width="3" stroke-linecap="round">
+    <line x1="32" y1="11" x2="32" y2="15"/>
+    <line x1="18.5" y1="16.5" x2="21.4" y2="19.4"/>
+    <line x1="45.5" y1="16.5" x2="42.6" y2="19.4"/>
+    <line x1="13" y1="30" x2="17" y2="30"/>
+    <line x1="51" y1="30" x2="47" y2="30"/>
+  </g>
+  <!-- the long table -->
+  <rect x="13" y="44" width="38" height="4" rx="2" fill="#ffffff"/>
+  <rect x="19" y="48" width="3" height="6" rx="1.5" fill="#ffffff"/>
+  <rect x="42" y="48" width="3" height="6" rx="1.5" fill="#ffffff"/>
+</svg>

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<!--
+=========================================================================
+HOW TO USE THIS TEMPLATE
+=========================================================================
+1. COPY this file into the app as  design/index.html . Nothing else needed.
+2. NAME THE APP: edit <title> and the data-tagline attribute on <body>.
+   The canvas header renders from those two values.
+3. STYLE THE APP: the tokens in :root are the LIGHT theme and the
+   [data-theme="dark"] block right below it is the DARK theme - editing
+   those two blocks (colors, font stack, radius) restyles both themes,
+   and every mock uses the variables.
+4. ADD A PAGE: copy one <section class="page"> block and edit it.
+
+     <section class="page" data-title="Home" data-note="One line: what this page is for">
+       <div class="mock web">    ...markup at 1280x800 natural size... </div>
+       <div class="mock mobile"> ...markup at  390x800 natural size... </div>
+     </section>
+
+   - data-title and data-note render the card heading automatically.
+     Never hand-write the card chrome, the browser bar or the phone frame.
+   - BOTH .web and .mobile mocks are REQUIRED on every card.
+   - Write real-size CSS (px). The canvas scales each mock down to fit.
+5. COMPONENT KIT - use these classes inside either mock:
+     .nav        top bar inside .web, bottom tab bar inside .mobile
+     .btn  .btn.primary   .input   .card   .avatar   .badge
+     .list + .list-item   .empty (empty state)
+     helpers: .row .col .grid2 .grid3 .spacer .h1 .h2 .muted .pad
+6. This is a STYLE PRESENTATION, not a working app: no links between
+   pages, no app logic, no scripts inside the mocks.
+7. Leave the <style> and <script> blocks alone - the two toggles in the
+   corner (MOBILE / WEB, keys "m" and "w"; LIGHT / DARK, keys "l" and
+   "d"), the scaling, the palette legend and the card chrome live there.
+=========================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taskly</title>
+<script>
+/* set the theme before first paint so the canvas never flashes the wrong one */
+(function () {
+  var saved = null;
+  try { saved = localStorage.getItem("design-canvas-theme"); } catch (e) { /* ignore */ }
+  var dark = saved ? saved === "dark"
+    : !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+})();
+</script>
+<style>
+/* =====================================================================
+   1. DESIGN TOKENS - :root is the LIGHT theme, [data-theme="dark"] the DARK one
+   ===================================================================== */
+:root {
+  /* palette */
+  --bg:       #f4f5f7;
+  --surface:  #ffffff;
+  --text:     #16181d;
+  --muted:    #6b7280;
+  --primary:  #3b5bdb;
+  --accent:   #12b886;
+  --border:   #e2e5ea;
+
+  /* typography + shape */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --radius: 12px;
+
+  /* canvas chrome (not part of the app's look) */
+  --canvas-bg:     #eef0f4;
+  --canvas-text:   #1c1f26;
+  --canvas-muted:  #6b7280;
+  --canvas-line:   #d7dae1;
+  --canvas-panel:  #ffffff;
+  --canvas-grid:   rgba(28, 31, 38, 0.07);
+  --canvas-glow:   rgba(59, 91, 219, 0.14);
+  --canvas-glow2:  rgba(18, 184, 134, 0.10);
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* how far each natural-size mock is scaled down inside a card */
+  /* per-card defaults; the script overrides these on every .page to fit its width */
+  --scale-web: 0.36;
+  --scale-mobile: 0.62;
+}
+
+/* DARK theme - every token above is redefined here. The theme is chosen by
+   the LIGHT / DARK toggle and stored as data-theme on <html>; the system
+   preference is only used as the starting point when nothing is stored. */
+[data-theme="dark"] {
+  /* palette */
+  --bg:       #14161a;
+  --surface:  #1d2027;
+  --text:     #edeff3;
+  --muted:    #9aa2af;
+  --primary:  #7d97ff;
+  --accent:   #38d9a9;
+  --border:   #2c313a;
+
+  /* typography + shape (inherited from :root unless you want a change) */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --radius: 12px;
+
+  /* canvas chrome */
+  --canvas-bg:     #0b0d11;
+  --canvas-text:   #edeff3;
+  --canvas-muted:  #9aa2af;
+  --canvas-line:   #262b34;
+  --canvas-panel:  #14171d;
+  --canvas-grid:   rgba(237, 239, 243, 0.06);
+  --canvas-glow:   rgba(125, 151, 255, 0.16);
+  --canvas-glow2:  rgba(56, 217, 169, 0.10);
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* scaling is theme-independent but restated so the block is complete */
+  --scale-web: 0.36;
+  --scale-mobile: 0.62;
+}
+
+/* make the browser paint native UI (scrollbars, form controls) to match */
+:root { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
+
+/* =====================================================================
+   2. CANVAS SHELL - header, grid, cards, device toggle
+   ===================================================================== */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 28px 28px 80px;
+  color: var(--canvas-text);
+  font-family: var(--font);
+  overflow-x: hidden;
+  /* a quiet dot grid over two soft glows: a drafting-table feel, nothing loud */
+  background-color: var(--canvas-bg);
+  background-image:
+    radial-gradient(900px 520px at 8% -10%, var(--canvas-glow), transparent 60%),
+    radial-gradient(700px 420px at 95% 0%, var(--canvas-glow2), transparent 60%),
+    radial-gradient(var(--canvas-grid) 1px, transparent 1.2px);
+  background-size: auto, auto, 22px 22px;
+  background-attachment: fixed, fixed, fixed;
+  min-height: 100vh;
+}
+
+/* header: a mono eyebrow, the app name, the tagline, then the palette */
+.canvas-header { margin: 0 auto 30px; }
+.canvas-header .eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 10px;
+  font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--canvas-muted);
+}
+.canvas-header .eyebrow .sep { opacity: .45; }
+.canvas-header .eyebrow::before {
+  content: ""; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+.canvas-header h1 {
+  margin: 0 0 6px; font-size: 34px; font-weight: 700; letter-spacing: -0.025em;
+  background: linear-gradient(120deg, var(--canvas-text) 0%, var(--canvas-text) 55%, var(--primary) 140%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.canvas-header .tagline { margin: 0; color: var(--canvas-muted); font-size: 15px; }
+
+/* palette legend - one tight strip, generated from the tokens by JS:
+   the colour blocks sit edge to edge like a paint chart, the name and
+   hex in mono underneath each */
+.legend {
+  display: inline-flex; margin-top: 18px;
+  border: 1px solid var(--canvas-line); border-radius: 12px; overflow: hidden;
+  background: color-mix(in srgb, var(--canvas-panel) 80%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+}
+.legend .swatch {
+  display: flex; flex-direction: column; min-width: 92px;
+  border-right: 1px solid var(--canvas-line);
+}
+.legend .swatch:last-child { border-right: 0; }
+.legend .chip { height: 26px; display: block; border: 0; border-radius: 0; box-shadow: none; }
+.legend .meta {
+  display: flex; flex-direction: column; gap: 3px; padding: 7px 10px 8px;
+  font: 500 10px/1 var(--mono); letter-spacing: .04em;
+}
+.legend .meta .name { color: var(--canvas-text); text-transform: uppercase; letter-spacing: .1em; font-size: 9.5px; }
+.legend .meta .hex { color: var(--canvas-muted); }
+@media (max-width: 760px) {
+  .legend { display: flex; flex-wrap: wrap; border-radius: 12px; }
+  .legend .swatch { min-width: 33.33%; border-bottom: 1px solid var(--canvas-line); }
+}
+
+/* the two toggles, fixed top-right: glass pills, mono labels, one lit segment */
+.toggles {
+  position: fixed; top: 18px; right: 18px; z-index: 50;
+  display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px;
+}
+.toggle {
+  display: flex; gap: 3px; padding: 4px;
+  background: color-mix(in srgb, var(--canvas-panel) 78%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--canvas-line);
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.toggle button {
+  font: 600 11px/1 var(--mono); letter-spacing: .12em;
+  padding: 9px 15px; border: 0; border-radius: 999px;
+  background: transparent; color: var(--canvas-muted); cursor: pointer;
+  transition: color .15s ease, background-color .15s ease, box-shadow .15s ease;
+}
+.toggle button:hover { color: var(--canvas-text); }
+.toggle button[aria-pressed="true"] {
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 70%, var(--accent)));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 35%, transparent), 0 4px 14px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* the grid of page cards - column width follows the active device.
+   Each card scales its frame to its own width (see fitFrames in the
+   script), so the grid can use the whole window: wide screens get more
+   and larger cards, narrow ones fewer and smaller, never dead space. */
+.canvas {
+  max-width: 1880px; margin: 0 auto;
+  display: grid; gap: 28px; align-items: start;
+  grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+}
+body[data-device="mobile"] .canvas {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+@media (max-width: 600px) {
+  .canvas { grid-template-columns: 1fr; }
+}
+.canvas-header { max-width: 1880px; }
+
+.page {
+  position: relative;
+  background: color-mix(in srgb, var(--canvas-panel) 92%, transparent);
+  border: 1px solid var(--canvas-line);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 10px 30px rgba(0,0,0,.06);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.page:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--canvas-line));
+  box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 18px 40px rgba(0,0,0,.12);
+}
+/* a hairline accent along the top edge, like a tab on a drafting sheet */
+.page::before {
+  content: ""; position: absolute; left: 18px; right: 18px; top: -1px; height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  opacity: .55;
+}
+.card-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+.card-head .index {
+  font: 500 11px/1 var(--mono); letter-spacing: .1em; color: var(--canvas-muted);
+  padding: 4px 7px; border: 1px solid var(--canvas-line); border-radius: 6px;
+}
+.card-head .titles { min-width: 0; }
+.card-head h2 { margin: 0 0 3px; font-size: 15px; font-weight: 650; letter-spacing: -0.01em; }
+.card-head p { margin: 0; font-size: 12px; color: var(--canvas-muted); }
+
+/* =====================================================================
+   3. DEVICE FRAMES - fixed-size windows holding a scaled natural-size stage
+   ===================================================================== */
+.frame {
+  overflow: hidden; border-radius: 10px; margin: 0 auto;
+  box-shadow: 0 12px 28px rgba(0,0,0,.14), 0 0 0 1px var(--canvas-line);
+}
+.frame-mobile { border-radius: 30px; }
+.frame .stage { transform-origin: top left; }
+
+.frame-web { width: calc(1280px * var(--scale-web)); height: calc(844px * var(--scale-web)); }
+.frame-web .stage {
+  width: 1280px; height: 844px; transform: scale(var(--scale-web));
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: 18px; overflow: hidden;
+}
+.browser-bar {
+  height: 44px; display: flex; align-items: center; gap: 10px;
+  padding: 0 18px; background: var(--bg); border-bottom: 1px solid var(--border);
+}
+.browser-bar .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--border); }
+.browser-bar .address {
+  flex: 1; height: 26px; margin-left: 12px; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 14px;
+  font-size: 13px; color: var(--muted);
+}
+
+.frame-mobile { width: calc(390px * var(--scale-mobile)); height: calc(844px * var(--scale-mobile)); }
+.frame-mobile .stage {
+  width: 390px; height: 844px; transform: scale(var(--scale-mobile));
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: 44px; overflow: hidden;
+}
+.status-bar {
+  height: 44px; position: relative; background: var(--bg);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 26px; font-size: 13px; font-weight: 600; color: var(--text);
+}
+.status-bar .notch {
+  position: absolute; left: 50%; transform: translateX(-50%); top: 8px;
+  width: 112px; height: 26px; border-radius: 999px; background: var(--text); opacity: .9;
+}
+
+/* one device at a time */
+body[data-device="web"] .frame-mobile,
+body[data-device="mobile"] .frame-web { display: none; }
+
+/* =====================================================================
+   4. MOCK SURFACE + COMPONENT KIT (usable inside both frames)
+   ===================================================================== */
+.mock {
+  font-family: var(--font); color: var(--text); background: var(--bg);
+  font-size: 15px; line-height: 1.45;
+}
+.mock.web    { width: 1280px; height: 800px; overflow: hidden; }
+.mock.mobile { width: 390px;  height: 800px; overflow: hidden; position: relative; padding-bottom: 72px; }
+
+.mock .pad    { padding: 28px 32px; }
+.mock .h1     { font-size: 26px; font-weight: 680; letter-spacing: -0.01em; margin: 0 0 6px; }
+.mock .h2     { font-size: 17px; font-weight: 640; margin: 0 0 10px; }
+.mock .muted  { color: var(--muted); font-size: 13px; }
+.mock .row    { display: flex; align-items: center; gap: 12px; }
+.mock .col    { display: flex; flex-direction: column; gap: 12px; }
+.mock .grid2  { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.mock .grid3  { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.mock .spacer { flex: 1; }
+
+/* nav: top bar on web, bottom tab bar on mobile */
+.mock .nav {
+  display: flex; align-items: center; gap: 22px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 32px; height: 64px; font-size: 14px; color: var(--muted);
+}
+.mock .nav .brand { font-weight: 700; color: var(--text); font-size: 16px; }
+.mock .nav .on { color: var(--primary); font-weight: 600; }
+.mock.mobile .nav {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 72px;
+  border-bottom: 0; border-top: 1px solid var(--border);
+  padding: 0 14px; justify-content: space-around; gap: 0; font-size: 11px;
+}
+.mock.mobile .nav .tab { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.mock.mobile .nav .tab .ico {
+  width: 22px; height: 22px; border-radius: 7px; background: var(--border);
+}
+.mock.mobile .nav .tab.on { color: var(--primary); font-weight: 600; }
+.mock.mobile .nav .tab.on .ico { background: var(--primary); }
+
+.mock .card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px;
+}
+.mock .btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 40px; padding: 0 18px; border-radius: var(--radius);
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+  font: 600 14px/1 var(--font); white-space: nowrap;
+}
+.mock .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.mock .input {
+  display: flex; align-items: center; height: 42px; padding: 0 14px;
+  border-radius: var(--radius); border: 1px solid var(--border);
+  background: var(--surface); color: var(--muted); font-size: 14px;
+}
+.mock .list {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.mock .list-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 15px;
+}
+.mock .list-item:last-child { border-bottom: 0; }
+.mock .list-item .box {
+  width: 18px; height: 18px; border-radius: 5px;
+  border: 2px solid var(--border); flex: none;
+}
+.mock .list-item .box.done { background: var(--accent); border-color: var(--accent); }
+.mock .list-item .done-text { color: var(--muted); text-decoration: line-through; }
+.mock .avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex: none;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+}
+.mock .badge {
+  display: inline-flex; align-items: center; height: 22px; padding: 0 10px;
+  border-radius: 999px; background: var(--bg); border: 1px solid var(--border);
+  color: var(--muted); font-size: 12px; font-weight: 600;
+}
+.mock .badge.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.mock .empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: 48px 24px; text-align: center;
+  border: 1px dashed var(--border); border-radius: var(--radius); color: var(--muted);
+}
+.mock .empty .glyph {
+  width: 48px; height: 48px; border-radius: 14px; background: var(--border);
+}
+</style>
+</head>
+
+<body data-tagline="Every screen of the app, in one canvas - switch between the web and mobile look.">
+
+<!-- the two toggles (behaviour lives in the script; markup stays here) -->
+<div class="toggles">
+  <div class="toggle" role="group" aria-label="Device preview">
+    <button type="button" id="btn-mobile" aria-pressed="false">MOBILE</button>
+    <button type="button" id="btn-web" aria-pressed="true">WEB</button>
+  </div>
+  <div class="toggle" role="group" aria-label="Colour theme">
+    <button type="button" id="btn-light" aria-pressed="true">LIGHT</button>
+    <button type="button" id="btn-dark" aria-pressed="false">DARK</button>
+  </div>
+</div>
+
+<header class="canvas-header">
+  <p class="eyebrow">UX canvas <span class="sep">/</span> every screen, one sheet</p>
+  <h1 id="app-name">App</h1>
+  <p class="tagline" id="app-tagline"></p>
+  <div class="legend" id="palette" aria-label="Colour palette"></div>
+</header>
+
+<main class="canvas" id="canvas">
+
+  <!-- ============================ PAGE CARD ============================ -->
+  <section class="page" data-title="Home" data-note="The first screen: today's tasks and how to add one.">
+
+    <div class="mock web">
+      <div class="nav">
+        <span class="brand">Taskly</span>
+        <span class="on">Today</span><span>Upcoming</span><span>Projects</span>
+        <span class="spacer"></span>
+        <span class="badge accent">3 due</span>
+        <span class="avatar">AM</span>
+      </div>
+      <div class="pad">
+        <p class="h1">Good morning, Ana</p>
+        <p class="muted">You have 3 tasks left today.</p>
+        <div class="row" style="margin:22px 0 20px;">
+          <div class="input" style="flex:1;">Add a task&hellip;</div>
+          <span class="btn primary">Add task</span>
+        </div>
+        <div class="grid2">
+          <div class="col">
+            <p class="h2">Today</p>
+            <div class="list">
+              <div class="list-item"><span class="box"></span> Send the kickoff email <span class="spacer"></span><span class="badge">9:00</span></div>
+              <div class="list-item"><span class="box"></span> Review the design canvas <span class="spacer"></span><span class="badge">11:30</span></div>
+              <div class="list-item"><span class="box done"></span> <span class="done-text">Water the plants</span></div>
+              <div class="list-item"><span class="box"></span> Book the team lunch <span class="spacer"></span><span class="badge">17:00</span></div>
+            </div>
+          </div>
+          <div class="col">
+            <p class="h2">Projects</p>
+            <div class="card"><div class="row"><span class="avatar">W</span><div><b>Website refresh</b><div class="muted">4 of 9 done</div></div></div></div>
+            <div class="card"><div class="row"><span class="avatar">H</span><div><b>House move</b><div class="muted">2 of 12 done</div></div></div></div>
+            <div class="card"><div class="row"><span class="avatar">R</span><div><b>Reading list</b><div class="muted">Nothing due</div></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mock mobile">
+      <div class="pad" style="padding:22px 20px;">
+        <p class="h1" style="font-size:24px;">Today</p>
+        <p class="muted">3 tasks left</p>
+        <div class="input" style="margin:18px 0 16px;">Add a task&hellip;</div>
+        <div class="list">
+          <div class="list-item"><span class="box"></span> Send the kickoff email</div>
+          <div class="list-item"><span class="box"></span> Review the design canvas</div>
+          <div class="list-item"><span class="box done"></span> <span class="done-text">Water the plants</span></div>
+          <div class="list-item"><span class="box"></span> Book the team lunch</div>
+        </div>
+        <div class="card" style="margin-top:18px;">
+          <div class="row"><span class="avatar">W</span><div><b>Website refresh</b><div class="muted">4 of 9 done</div></div></div>
+        </div>
+      </div>
+      <div class="nav">
+        <span class="tab on"><span class="ico"></span>Today</span>
+        <span class="tab"><span class="ico"></span>Upcoming</span>
+        <span class="tab"><span class="ico"></span>Projects</span>
+        <span class="tab"><span class="ico"></span>Me</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ PAGE CARD ============================ -->
+  <section class="page" data-title="Settings" data-note="Account details, reminders and the look of the app.">
+
+    <div class="mock web">
+      <div class="nav">
+        <span class="brand">Taskly</span>
+        <span>Today</span><span>Upcoming</span><span>Projects</span>
+        <span class="spacer"></span>
+        <span class="on">Settings</span>
+        <span class="avatar">AM</span>
+      </div>
+      <div class="pad">
+        <p class="h1">Settings</p>
+        <p class="muted">Changes save as you make them.</p>
+        <div class="grid2" style="margin-top:24px; align-items:start;">
+          <div class="col">
+            <div class="card">
+              <p class="h2">Account</p>
+              <div class="row" style="margin-bottom:16px;"><span class="avatar">AM</span><div><b>Ana Marsh</b><div class="muted">ana@example.com</div></div></div>
+              <div class="col">
+                <div class="input">Ana Marsh</div>
+                <div class="input">ana@example.com</div>
+              </div>
+              <div class="row" style="margin-top:16px;"><span class="btn primary">Save changes</span><span class="btn">Sign out</span></div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="list">
+              <div class="list-item">Daily reminder <span class="spacer"></span><span class="badge accent">On</span></div>
+              <div class="list-item">Email digest <span class="spacer"></span><span class="badge">Off</span></div>
+              <div class="list-item">Week starts on <span class="spacer"></span><span class="badge">Monday</span></div>
+              <div class="list-item">Theme <span class="spacer"></span><span class="badge">System</span></div>
+            </div>
+            <div class="card">
+              <p class="h2">Danger zone</p>
+              <p class="muted">Deleting your account removes every task for good.</p>
+              <span class="btn" style="margin-top:12px;">Delete account</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mock mobile">
+      <div class="pad" style="padding:22px 20px;">
+        <p class="h1" style="font-size:24px;">Settings</p>
+        <div class="card" style="margin:16px 0;">
+          <div class="row"><span class="avatar">AM</span><div><b>Ana Marsh</b><div class="muted">ana@example.com</div></div></div>
+        </div>
+        <div class="list">
+          <div class="list-item">Daily reminder <span class="spacer"></span><span class="badge accent">On</span></div>
+          <div class="list-item">Email digest <span class="spacer"></span><span class="badge">Off</span></div>
+          <div class="list-item">Week starts on <span class="spacer"></span><span class="badge">Mon</span></div>
+          <div class="list-item">Theme <span class="spacer"></span><span class="badge">System</span></div>
+        </div>
+        <span class="btn" style="margin-top:18px; width:100%;">Sign out</span>
+      </div>
+      <div class="nav">
+        <span class="tab"><span class="ico"></span>Today</span>
+        <span class="tab"><span class="ico"></span>Upcoming</span>
+        <span class="tab"><span class="ico"></span>Projects</span>
+        <span class="tab on"><span class="ico"></span>Me</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== COPY THIS CARD FOR A NEW PAGE ===================== -->
+  <section class="page" data-title="New page (copy me)" data-note="Replace the title, the note and both mocks below.">
+
+    <div class="mock web">
+      <div class="nav">
+        <span class="brand">Taskly</span><span class="on">Section</span><span>Section</span>
+        <span class="spacer"></span><span class="avatar">AM</span>
+      </div>
+      <div class="pad">
+        <p class="h1">Page title</p>
+        <p class="muted">One line about what happens on this page.</p>
+        <div class="empty" style="margin-top:28px;">
+          <span class="glyph"></span>
+          <b>Nothing here yet</b>
+          <span>Describe the page, then drop cards, lists and buttons in.</span>
+          <span class="btn primary" style="margin-top:8px;">Primary action</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mock mobile">
+      <div class="pad" style="padding:22px 20px;">
+        <p class="h1" style="font-size:24px;">Page title</p>
+        <p class="muted">One line about this page.</p>
+        <div class="empty" style="margin-top:20px;">
+          <span class="glyph"></span>
+          <b>Nothing here yet</b>
+          <span class="btn primary" style="margin-top:8px;">Primary action</span>
+        </div>
+      </div>
+      <div class="nav">
+        <span class="tab on"><span class="ico"></span>Today</span>
+        <span class="tab"><span class="ico"></span>Upcoming</span>
+        <span class="tab"><span class="ico"></span>Projects</span>
+        <span class="tab"><span class="ico"></span>Me</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* =====================================================================
+   Canvas behaviour. Authors do not need to touch anything below.
+   - renders the header, the palette legend and each card's chrome
+   - wraps every mock in a browser window / phone frame
+   - the MOBILE / WEB toggle, remembered in localStorage, keys m and w
+   - the LIGHT / DARK toggle, remembered in localStorage, keys l and d
+   ===================================================================== */
+(function () {
+  "use strict";
+
+  var DEVICE_KEY = "design-canvas-device";
+  var THEME_KEY = "design-canvas-theme";
+  var TOKENS = ["bg", "surface", "text", "muted", "primary", "accent", "border"];
+
+  /* localStorage is unavailable in some contexts (private mode, file sandboxes) */
+  function store(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* ignore */ }
+  }
+  function stored(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+
+  /* ---- header: app name and tagline ---- */
+  function renderHeader() {
+    var name = document.body.getAttribute("data-app") || document.title || "App";
+    document.getElementById("app-name").textContent = name;
+    document.getElementById("app-tagline").textContent =
+      document.body.getAttribute("data-tagline") || "";
+  }
+
+  /* ---- palette legend: rebuilt from the tokens of the ACTIVE theme ---- */
+  function renderPalette() {
+    var styles = getComputedStyle(document.documentElement);
+    var legend = document.getElementById("palette");
+    legend.textContent = "";
+    TOKENS.forEach(function (token) {
+      var value = styles.getPropertyValue("--" + token).trim();
+      var wrap = document.createElement("span");
+      wrap.className = "swatch";
+      var chip = document.createElement("span");
+      chip.className = "chip";
+      chip.style.background = value;
+      var meta = document.createElement("span");
+      meta.className = "meta";
+      var name = document.createElement("span");
+      name.className = "name";
+      name.textContent = token;
+      var hex = document.createElement("span");
+      hex.className = "hex";
+      hex.textContent = value;
+      meta.appendChild(name);
+      meta.appendChild(hex);
+      wrap.appendChild(chip);
+      wrap.appendChild(meta);
+      wrap.title = token + ": " + value;
+      legend.appendChild(wrap);
+    });
+  }
+
+  /* ---- one page card: heading + framed web mock + framed phone mock ---- */
+  function buildCard(page, index) {
+    var title = page.getAttribute("data-title") || "Untitled page";
+    var note = page.getAttribute("data-note") || "";
+
+    var head = document.createElement("div");
+    head.className = "card-head";
+    var idx = document.createElement("span");
+    idx.className = "index";
+    idx.textContent = String(index + 1).padStart(2, "0");
+    var titles = document.createElement("div");
+    titles.className = "titles";
+    var h2 = document.createElement("h2");
+    h2.textContent = title;
+    var p = document.createElement("p");
+    p.textContent = note;
+    titles.appendChild(h2);
+    titles.appendChild(p);
+    head.appendChild(idx);
+    head.appendChild(titles);
+
+    var webMock = page.querySelector(".mock.web");
+    var mobileMock = page.querySelector(".mock.mobile");
+    if (!webMock || !mobileMock) {
+      console.warn("Page card " + (index + 1) + ' ("' + title + '") is missing a .web or .mobile mock.');
+    }
+
+    if (webMock) {
+      var webFrame = document.createElement("div");
+      webFrame.className = "frame frame-web";
+      var webStage = document.createElement("div");
+      webStage.className = "stage";
+      var bar = document.createElement("div");
+      bar.className = "browser-bar";
+      bar.innerHTML =
+        '<span class="dot"></span><span class="dot"></span><span class="dot"></span>' +
+        '<span class="address"></span>';
+      bar.querySelector(".address").textContent =
+        slug(document.title) + ".app/" + slug(title);
+      var webScreen = document.createElement("div");
+      webScreen.className = "screen";
+      webScreen.appendChild(webMock);
+      webStage.appendChild(bar);
+      webStage.appendChild(webScreen);
+      webFrame.appendChild(webStage);
+      page.appendChild(webFrame);
+    }
+
+    if (mobileMock) {
+      var phoneFrame = document.createElement("div");
+      phoneFrame.className = "frame frame-mobile";
+      var phoneStage = document.createElement("div");
+      phoneStage.className = "stage";
+      var status = document.createElement("div");
+      status.className = "status-bar";
+      status.innerHTML = "<span>9:41</span><span class=\"notch\"></span><span>100%</span>";
+      var phoneScreen = document.createElement("div");
+      phoneScreen.className = "screen";
+      phoneScreen.appendChild(mobileMock);
+      phoneStage.appendChild(status);
+      phoneStage.appendChild(phoneScreen);
+      phoneFrame.appendChild(phoneStage);
+      page.appendChild(phoneFrame);
+    }
+
+    page.insertBefore(head, page.firstChild);
+  }
+
+  function slug(text) {
+    return String(text).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+
+  /* ---- device toggle (MOBILE / WEB) ---- */
+  var mobileBtn = document.getElementById("btn-mobile");
+  var webBtn = document.getElementById("btn-web");
+
+  function setDevice(device, remember) {
+    var value = device === "mobile" ? "mobile" : "web";
+    document.body.setAttribute("data-device", value);
+    mobileBtn.setAttribute("aria-pressed", String(value === "mobile"));
+    webBtn.setAttribute("aria-pressed", String(value === "web"));
+    if (remember) store(DEVICE_KEY, value);
+  }
+
+  /* ---- theme toggle (LIGHT / DARK) ---- */
+  var lightBtn = document.getElementById("btn-light");
+  var darkBtn = document.getElementById("btn-dark");
+
+  function setTheme(theme, remember) {
+    var value = theme === "dark" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", value);
+    lightBtn.setAttribute("aria-pressed", String(value === "light"));
+    darkBtn.setAttribute("aria-pressed", String(value === "dark"));
+    if (remember) store(THEME_KEY, value);
+    renderPalette();
+  }
+
+  /* stored choice wins; otherwise fall back to the system preference once */
+  function initialTheme() {
+    var saved = stored(THEME_KEY);
+    if (saved === "light" || saved === "dark") return saved;
+    var mq = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)");
+    return mq && mq.matches ? "dark" : "light";
+  }
+
+  /* ---- boot ---- */
+  renderHeader();
+  Array.prototype.forEach.call(document.querySelectorAll(".page"), buildCard);
+  setDevice(stored(DEVICE_KEY) === "mobile" ? "mobile" : "web", false);
+  setTheme(initialTheme(), false);
+
+  mobileBtn.addEventListener("click", function () { setDevice("mobile", true); });
+  webBtn.addEventListener("click", function () { setDevice("web", true); });
+  lightBtn.addEventListener("click", function () { setTheme("light", true); });
+  darkBtn.addEventListener("click", function () { setTheme("dark", true); });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    var tag = (event.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea" || event.target.isContentEditable) return;
+    var key = event.key.toLowerCase();
+    if (key === "m") setDevice("mobile", true);
+    if (key === "w") setDevice("web", true);
+    if (key === "l") setTheme("light", true);
+    if (key === "d") setTheme("dark", true);
+  });
+})();
+
+/* ---------------------------------------------------------------------
+   Fit every frame to its card. A web mock is 1280px wide and a mobile
+   one 390px; each card gets the scale that makes the active frame fill
+   the card's inner width (phones are capped so they stay phone-sized).
+   Runs on load, on resize, and whenever the device toggles.
+   --------------------------------------------------------------------- */
+(function () {
+  var WEB_W = 1280, MOBILE_W = 390, MOBILE_MAX_PX = 330;
+  function fit(page) {
+    var cs = getComputedStyle(page);
+    var inner = page.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    if (!(inner > 0)) return;
+    page.style.setProperty("--scale-web", (inner / WEB_W).toFixed(4));
+    page.style.setProperty("--scale-mobile", (Math.min(inner, MOBILE_MAX_PX) / MOBILE_W).toFixed(4));
+  }
+  function fitAll() { document.querySelectorAll(".page").forEach(fit); }
+  if (typeof ResizeObserver === "function") {
+    var ro = new ResizeObserver(function (entries) { entries.forEach(function (e) { fit(e.target); }); });
+    document.querySelectorAll(".page").forEach(function (p) { ro.observe(p); });
+  } else {
+    window.addEventListener("resize", fitAll);
+  }
+  new MutationObserver(fitAll).observe(document.body, { attributes: true, attributeFilter: ["data-device"] });
+  fitAll();
+})();
+</script>
+</body>
+</html>

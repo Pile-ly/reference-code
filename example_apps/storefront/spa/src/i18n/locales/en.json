@@ -1,0 +1,53 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong: {{reason}}"
+  },
+  "nav": {
+    "classes": "Classes",
+    "contact": "Contact",
+    "inquiries": "Inquiries",
+    "signIn": "Login with Pilely",
+    "signOut": "Sign out"
+  },
+  "classes": {
+    "heading": "Classes",
+    "inquire": "Inquire"
+  },
+  "contact": {
+    "heading": "Contact us",
+    "askingAs": "Asking as @{{handle}} — we'll reply to the email below.",
+    "aboutLabel": "About",
+    "aboutGeneral": "General question",
+    "emailLabel": "Email *",
+    "emailPlaceholder": "you@example.com",
+    "phoneLabel": "Phone — optional",
+    "phonePlaceholder": "+1 …",
+    "questionLabel": "Your question *",
+    "questionPlaceholder": "What do you want to know?",
+    "send": "Send inquiry",
+    "required": "Email and question are required",
+    "sendFailed": "Couldn't send: {{reason}}",
+    "refused": "Your inquiry wasn't accepted. Sign in again and retry.",
+    "gateLead": "Sign in to send an inquiry — takes a few seconds.",
+    "sentTitle": "Inquiry sent",
+    "sentBody": "We read every message and reply within a day.",
+    "backHome": "Back to home"
+  },
+  "admin": {
+    "heading": "Inquiries",
+    "lead": "Newest first · read-only — reply from your own email.",
+    "empty": "No inquiries yet.",
+    "loadMore": "Load more"
+  },
+  "footer": {
+    "aiHint": "You can also use this app straight from your AI client — just tell it: \"curl {{origin}}/index.md\"."
+  },
+  "theme": {
+    "toggleAria": "Toggle dark/light theme"
+  },
+  "setup": {
+    "noAppIdTitle": "No registered pile id",
+    "noAppIdBody": "This storefront has no registered pile id yet. Replace the REPLACE_WITH_YOUR_PILE_ID placeholder in index.html's <meta name=\"pilely-app\"> tag with the id registration returned, then rebuild — see build_instruction.md. To try the storefront without registering, run npm run dev:mock."
+  }
+}

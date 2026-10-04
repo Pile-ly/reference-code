@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img">
+  <!-- Landing band art: youth class focus pads. Flat geometric "photo";
+       a real deployment swaps these for photos via src/config.ts. -->
+  <rect width="800" height="520" fill="#2a2e1a"/>
+  <ellipse cx="400" cy="260" rx="370" ry="210" fill="#333921" opacity="0.6"/>
+  <!-- coach's focus pad (big, right) -->
+  <g>
+    <circle cx="530" cy="240" r="120" fill="#d9d2c4"/>
+    <circle cx="530" cy="240" r="78" fill="none" stroke="#b8ab8f" stroke-width="10"/>
+    <circle cx="530" cy="240" r="26" fill="#e04a1f"/>
+    <!-- pad strap/back -->
+    <rect x="622" y="196" width="54" height="96" rx="24" fill="#8f8468"/>
+  </g>
+  <!-- kid's glove mid-punch (left, accent) -->
+  <g>
+    <path d="M258 296 a58 58 0 0 1 58 -58 h22 a52 52 0 0 1 52 52 v30 a64 64 0 0 1 -64 64 h-14 a54 54 0 0 1 -54 -54 z" fill="#e04a1f"/>
+    <path d="M258 322 a26 26 0 0 1 26 -26 h10 v48 h-10 a26 26 0 0 1 -26 -22 z" fill="#a33415"/>
+    <rect x="292" y="382" width="64" height="26" rx="12" fill="#f0704a"/>
+  </g>
+  <!-- motion ticks between glove and pad -->
+  <g stroke="#e8e2d2" stroke-width="7" stroke-linecap="round" opacity="0.7">
+    <line x1="402" y1="212" x2="422" y2="204"/>
+    <line x1="408" y1="252" x2="430" y2="250"/>
+    <line x1="402" y1="292" x2="422" y2="298"/>
+  </g>
+  <!-- floor -->
+  <rect x="0" y="452" width="800" height="68" fill="#232717"/>
+</svg>

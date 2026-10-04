@@ -1,0 +1,83 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong: {{reason}}",
+    "notFound": "This post doesn't exist.",
+    "back": "Back to all posts",
+    "untitled": "Untitled"
+  },
+  "nav": {
+    "signIn": "Login with Pilely",
+    "drafts": "Drafts ({{count}})",
+    "newPost": "New post",
+    "signOut": "Sign out"
+  },
+  "masthead": {
+    "by": "by @{{handle}}"
+  },
+  "card": {
+    "latest": "Latest",
+    "minRead": "{{mins}} min read",
+    "comments_one": "{{count}} comment",
+    "comments_other": "{{count}} comments"
+  },
+  "home": {
+    "empty": "No posts yet.",
+    "more": "More posts"
+  },
+  "post": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Delete this post? This can't be undone.",
+    "postDeleted": "Post deleted",
+    "commentsHeading_one": "{{count}} comment",
+    "commentsHeading_other": "{{count}} comments",
+    "composerPlaceholder": "Add a comment as @{{handle}}",
+    "postComment": "Post comment",
+    "commentAdded": "Comment posted",
+    "commentRefused": "Your comment wasn't posted: {{reason}}",
+    "gateLead": "Join the conversation — comments are for signed-in readers.",
+    "remove": "Remove",
+    "confirmRemove": "Remove this comment?",
+    "commentRemoved": "Comment removed",
+    "moreComments": "More comments",
+    "signInToLike": "Login with Pilely to like posts",
+    "alreadyLiked": "Already liked — a like can't be taken back",
+    "likeRefused": "Like not saved: {{reason}}",
+    "likeAria": "Like this post"
+  },
+  "editor": {
+    "titlePlaceholder": "Title",
+    "subtitlePlaceholder": "Add a subtitle…",
+    "bodyPlaceholder": "Write in markdown…",
+    "hint": "markdown · ~16 KB max per post (simple_db record limit)",
+    "saveDraft": "Save draft",
+    "publish": "Publish",
+    "update": "Update post",
+    "draftSaved": "Draft saved",
+    "published": "Published",
+    "postUpdated": "Post updated",
+    "saveFailed": "Couldn't save: {{reason}}"
+  },
+  "drafts": {
+    "heading": "Drafts",
+    "sub": "Only you can see these.",
+    "empty": "No drafts. Enjoy the silence.",
+    "edit": "Edit",
+    "publish": "Publish",
+    "delete": "Delete",
+    "confirmDelete": "Delete this draft? This can't be undone.",
+    "noSubtitle": "No subtitle",
+    "more": "More drafts"
+  },
+  "footer": {
+    "aiHint": "You can also use this app straight from your AI client — just tell it: \"curl {{origin}}/index.md\"."
+  },
+  "theme": {
+    "toggleAria": "Toggle dark/light theme"
+  },
+  "setup": {
+    "noAppIdTitle": "No registered pile id",
+    "noAppIdBody": "This blog has no registered pile id yet. Replace the REPLACE_WITH_YOUR_PILE_ID placeholder in index.html's <meta name=\"pilely-app\"> tag with the id registration returned, then rebuild — see build_instruction.md. To try the blog without registering, run npm run dev:mock."
+  }
+}
