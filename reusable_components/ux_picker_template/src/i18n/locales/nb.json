@@ -1,0 +1,25 @@
+{
+  "picker": {
+    "note": "Dette handler bare om stil — hvordan appen din ser ut og føles. Det er ikke listen over alle sidene vi skal bygge. Vil du se en bestemt side eller funksjon? Bare si fra.",
+    "width": {
+      "label": "Forhåndsvisningsbredde",
+      "phone": "📱 Telefon",
+      "computer": "💻 Datamaskin"
+    },
+    "looks": {
+      "label": "Stiler",
+      "previous": "Forrige stil",
+      "next": "Neste stil"
+    },
+    "help": {
+      "open": "Hva er denne siden?",
+      "close": "Lukk",
+      "title": "Hva er denne siden?",
+      "p1": "Du velger hvordan appen din skal <1>se ut</1>. Denne siden viser en eksempelapp i noen forskjellige stiler — skjermene og innholdet er bare eksempler, ikke den ekte appen din.",
+      "p2": "<0>Bla gjennom stilene</0> med knappene nederst, og bruk telefon- og datamaskinknappene for å se hvordan hver av dem føles i begge bredder.",
+      "p3": "Når én føles riktig, si bare navnet — for eksempel <1>\"Jeg liker Bold\"</1> — så bygger jeg appen din i den stilen.",
+      "p4": "Ingenting må være perfekt her. Du kan også be meg om å <1>justere en stil</1> — <3>\"Playful, men blå i stedet for rosa\"</3> — eller om å <5>vise flere valg</5> hvis ingen passer.",
+      "gotIt": "Skjønner"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "picker": {
+    "note": "Burada konu yalnızca stil — uygulamanın görünüşü ve havası. Bu, yapacağımız tüm sayfaların listesi değil. Belirli bir sayfayı ya da özelliği görmek ister misin? Söylemen yeterli.",
+    "width": {
+      "label": "Önizleme genişliği",
+      "phone": "📱 Telefon",
+      "computer": "💻 Bilgisayar"
+    },
+    "looks": {
+      "label": "Stiller",
+      "previous": "Önceki stil",
+      "next": "Sonraki stil"
+    },
+    "help": {
+      "open": "Bu sayfa nedir?",
+      "close": "Kapat",
+      "title": "Bu sayfa nedir?",
+      "p1": "Uygulamanın nasıl <1>görüneceğini</1> seçiyorsun. Bu sayfa örnek bir uygulamayı birkaç farklı stilde gösteriyor — ekranlar ve içerik yalnızca örnek, gerçek uygulaman değil.",
+      "p2": "Alttaki düğmelerle <0>stiller arasında gez</0>, telefon ve bilgisayar düğmeleriyle her birinin iki genişlikte nasıl durduğuna bak.",
+      "p3": "Biri doğru geldiğinde adını söylemen yeterli — mesela <1>\"Bold'u beğendim\"</1> — uygulamanı o stilde yaparım.",
+      "p4": "Burada hiçbir şeyin kusursuz olması gerekmiyor. Bir <1>stili değiştirmemi</1> — <3>\"Playful ama pembe yerine mavi\"</3> — ya da hiçbiri olmadıysa <5>başka seçenekler göstermemi</5> de isteyebilirsin.",
+      "gotIt": "Anladım"
+    }
+  }
+}
