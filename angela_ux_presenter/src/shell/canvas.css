@@ -1,0 +1,349 @@
+/* SHELL — do not edit. Pages live in src/pages/, tokens in src/theme/. */
+
+/* how far each natural-size mock is scaled down inside a card */
+/* per-card defaults; the script overrides these on every .page to fit its width */
+:root {
+  --scale-web: 0.36;
+  --scale-mobile: 0.62;
+}
+/* scaling is theme-independent but restated so the block is complete */
+[data-theme="dark"] {
+  --scale-web: 0.36;
+  --scale-mobile: 0.62;
+}
+
+/* =====================================================================
+   2. CANVAS SHELL - header, grid, cards, device toggle
+   ===================================================================== */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 28px 28px 80px;
+  color: var(--canvas-text);
+  font-family: var(--font);
+  overflow-x: hidden;
+  /* a quiet dot grid over two soft glows: a drafting-table feel, nothing loud */
+  background-color: var(--canvas-bg);
+  background-image:
+    radial-gradient(900px 520px at 8% -10%, var(--canvas-glow), transparent 60%),
+    radial-gradient(700px 420px at 95% 0%, var(--canvas-glow2), transparent 60%),
+    radial-gradient(var(--canvas-grid) 1px, transparent 1.2px);
+  background-size: auto, auto, 22px 22px;
+  background-attachment: fixed, fixed, fixed;
+  min-height: 100vh;
+}
+
+/* header: a mono eyebrow, the app name, the tagline, then the palette */
+.canvas-header { margin: 0 auto 30px; }
+.canvas-header .eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 10px;
+  font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--canvas-muted);
+}
+.canvas-header .eyebrow .sep { opacity: .45; }
+.canvas-header .eyebrow::before {
+  content: ""; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+.canvas-header h1 {
+  margin: 0 0 6px; font-size: 34px; font-weight: 700; letter-spacing: -0.025em;
+  background: linear-gradient(120deg, var(--canvas-text) 0%, var(--canvas-text) 55%, var(--primary) 140%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.canvas-header .tagline { margin: 0; color: var(--canvas-muted); font-size: 15px; }
+
+/* palette legend - one tight strip, generated from the tokens by JS:
+   the colour blocks sit edge to edge like a paint chart, the name and
+   hex in mono underneath each */
+.legend {
+  display: inline-flex; margin-top: 18px;
+  border: 1px solid var(--canvas-line); border-radius: 12px; overflow: hidden;
+  background: color-mix(in srgb, var(--canvas-panel) 80%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+}
+.legend .swatch {
+  display: flex; flex-direction: column; min-width: 92px;
+  border-right: 1px solid var(--canvas-line);
+}
+.legend .swatch:last-child { border-right: 0; }
+.legend .chip { height: 26px; display: block; border: 0; border-radius: 0; box-shadow: none; }
+.legend .meta {
+  display: flex; flex-direction: column; gap: 3px; padding: 7px 10px 8px;
+  font: 500 10px/1 var(--mono); letter-spacing: .04em;
+}
+.legend .meta .name { color: var(--canvas-text); text-transform: uppercase; letter-spacing: .1em; font-size: 9.5px; }
+.legend .meta .hex { color: var(--canvas-muted); }
+@media (max-width: 760px) {
+  .legend { display: flex; flex-wrap: wrap; border-radius: 12px; }
+  .legend .swatch { min-width: 33.33%; border-bottom: 1px solid var(--canvas-line); }
+}
+
+/* the two toggles, fixed top-right: glass pills, mono labels, one lit segment */
+.toggles {
+  position: fixed; top: 18px; right: 18px; z-index: 50;
+  display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px;
+}
+.toggle {
+  display: flex; gap: 3px; padding: 4px;
+  background: color-mix(in srgb, var(--canvas-panel) 78%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--canvas-line);
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.toggle button {
+  font: 600 11px/1 var(--mono); letter-spacing: .12em;
+  padding: 9px 15px; border: 0; border-radius: 999px;
+  background: transparent; color: var(--canvas-muted); cursor: pointer;
+  transition: color .15s ease, background-color .15s ease, box-shadow .15s ease;
+}
+.toggle button:hover { color: var(--canvas-text); }
+.toggle button[aria-pressed="true"] {
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 70%, var(--accent)));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 35%, transparent), 0 4px 14px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* the grid of page cards - column width follows the active device.
+   Each card scales its frame to its own width (see fitFrames in the
+   script), so the grid can use the whole window: wide screens get more
+   and larger cards, narrow ones fewer and smaller, never dead space. */
+.canvas {
+  max-width: 1880px; margin: 0 auto;
+  display: grid; gap: 28px; align-items: start;
+  grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+}
+body[data-device="mobile"] .canvas {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+@media (max-width: 600px) {
+  .canvas { grid-template-columns: 1fr; }
+}
+.canvas-header { max-width: 1880px; }
+
+.page {
+  position: relative;
+  background: color-mix(in srgb, var(--canvas-panel) 92%, transparent);
+  border: 1px solid var(--canvas-line);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 10px 30px rgba(0,0,0,.06);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.page:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--canvas-line));
+  box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 18px 40px rgba(0,0,0,.12);
+}
+/* a hairline accent along the top edge, like a tab on a drafting sheet */
+.page::before {
+  content: ""; position: absolute; left: 18px; right: 18px; top: -1px; height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  opacity: .55;
+}
+.card-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+.card-head .index {
+  font: 500 11px/1 var(--mono); letter-spacing: .1em; color: var(--canvas-muted);
+  padding: 4px 7px; border: 1px solid var(--canvas-line); border-radius: 6px;
+}
+.card-head .titles { min-width: 0; flex: 1; }
+.card-head h2 { margin: 0 0 3px; font-size: 15px; font-weight: 650; letter-spacing: -0.01em; }
+.card-head p { margin: 0; font-size: 12px; color: var(--canvas-muted); }
+
+/* a card opens full screen on click; the button says so and closes it again */
+.page { cursor: zoom-in; }
+.card-head .expand {
+  align-self: center; flex: none;
+  width: 28px; height: 28px; padding: 0;
+  border: 1px solid var(--canvas-line); border-radius: 8px;
+  background: transparent; color: var(--canvas-muted); cursor: pointer;
+  font: 500 14px/1 var(--mono);
+  opacity: 0; transition: opacity .15s ease, color .15s ease, border-color .15s ease;
+}
+.card-head .expand::before { content: "\2922"; }
+.page:hover .expand, .expand:focus-visible, .page.focused .expand { opacity: 1; }
+.card-head .expand:hover { color: var(--canvas-text); border-color: var(--primary); }
+
+/* full screen: one card over everything except the toggles */
+body.has-focus { overflow: hidden; }
+.page.focused {
+  position: fixed; inset: 0; z-index: 40;
+  border-radius: 0; border: 0; padding: 22px 28px 28px;
+  background-color: var(--canvas-bg);
+  cursor: default; transform: none; box-shadow: none;
+}
+.page.focused:hover { transform: none; box-shadow: none; }
+.page.focused::before { display: none; }
+.page.focused .card-head { margin-bottom: 16px; padding-right: 330px; }
+.page.focused .card-head .expand::before { content: "\2715"; }
+@media (max-width: 720px) {
+  .page.focused { padding-top: 76px; }
+  .page.focused .card-head { padding-right: 0; }
+}
+
+/* shown in place of the cards while src/pages/ is empty */
+.no-pages {
+  grid-column: 1 / -1;
+  display: flex; flex-direction: column; gap: 6px; align-items: center;
+  padding: 56px 24px; text-align: center;
+  border: 1px dashed var(--canvas-line); border-radius: 18px;
+  color: var(--canvas-muted); font-size: 14px;
+}
+.no-pages strong { color: var(--canvas-text); font-size: 16px; }
+.no-pages code { font-family: var(--mono); font-size: 12.5px; }
+
+/* =====================================================================
+   3. DEVICE FRAMES - fixed-size windows holding a scaled natural-size stage
+   ===================================================================== */
+.frame {
+  overflow: hidden; border-radius: 10px; margin: 0 auto;
+  box-shadow: 0 12px 28px rgba(0,0,0,.14), 0 0 0 1px var(--canvas-line);
+}
+.frame-mobile { border-radius: 30px; }
+.frame .stage { transform-origin: top left; }
+
+.frame-web { width: calc(1280px * var(--scale-web)); height: calc(844px * var(--scale-web)); }
+.frame-web .stage {
+  width: 1280px; height: 844px; transform: scale(var(--scale-web));
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: 18px; overflow: hidden;
+}
+.browser-bar {
+  height: 44px; display: flex; align-items: center; gap: 10px;
+  padding: 0 18px; background: var(--bg); border-bottom: 1px solid var(--border);
+}
+.browser-bar .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--border); }
+.browser-bar .address {
+  flex: 1; height: 26px; margin-left: 12px; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 14px;
+  font-size: 13px; color: var(--muted);
+}
+
+.frame-mobile { width: calc(390px * var(--scale-mobile)); height: calc(844px * var(--scale-mobile)); }
+.frame-mobile .stage {
+  width: 390px; height: 844px; transform: scale(var(--scale-mobile));
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: 44px; overflow: hidden;
+}
+.status-bar {
+  height: 44px; position: relative; background: var(--bg);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 26px; font-size: 13px; font-weight: 600; color: var(--text);
+}
+.status-bar .notch {
+  position: absolute; left: 50%; transform: translateX(-50%); top: 8px;
+  width: 112px; height: 26px; border-radius: 999px; background: var(--text); opacity: .9;
+}
+
+/* one device at a time */
+body[data-device="web"] .frame-mobile,
+body[data-device="mobile"] .frame-web { display: none; }
+
+/* =====================================================================
+   4. MOCK SURFACE + COMPONENT KIT (usable inside both frames)
+   ===================================================================== */
+.mock {
+  font-family: var(--font); color: var(--text); background: var(--bg);
+  font-size: 15px; line-height: 1.45;
+}
+.mock.web    { width: 1280px; height: 800px; overflow: hidden; }
+.mock.mobile { width: 390px;  height: 800px; overflow: hidden; position: relative; padding-bottom: 72px; }
+
+.mock .pad    { padding: 28px 32px; }
+.mock .h1     { font-size: 26px; font-weight: 680; letter-spacing: -0.01em; margin: 0 0 6px; }
+.mock .h2     { font-size: 17px; font-weight: 640; margin: 0 0 10px; }
+.mock .muted  { color: var(--muted); font-size: 13px; }
+.mock .row    { display: flex; align-items: center; gap: 12px; }
+.mock .col    { display: flex; flex-direction: column; gap: 12px; }
+.mock .grid2  { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.mock .grid3  { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.mock .spacer { flex: 1; }
+
+/* nav: top bar on web, bottom tab bar on mobile */
+.mock .nav {
+  display: flex; align-items: center; gap: 22px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 32px; height: 64px; font-size: 14px; color: var(--muted);
+}
+.mock .nav .brand { font-weight: 700; color: var(--text); font-size: 16px; }
+.mock .nav .on { color: var(--primary); font-weight: 600; }
+.mock.mobile .nav {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 72px;
+  border-bottom: 0; border-top: 1px solid var(--border);
+  padding: 0 14px; justify-content: space-around; gap: 0; font-size: 11px;
+}
+.mock.mobile .nav .tab { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.mock.mobile .nav .tab .ico {
+  width: 22px; height: 22px; border-radius: 7px; background: var(--border);
+}
+.mock.mobile .nav .tab.on { color: var(--primary); font-weight: 600; }
+.mock.mobile .nav .tab.on .ico { background: var(--primary); }
+
+.mock .card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px;
+}
+.mock .btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 40px; padding: 0 18px; border-radius: var(--radius);
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+  font: 600 14px/1 var(--font); white-space: nowrap;
+}
+.mock .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.mock .input {
+  display: flex; align-items: center; height: 42px; padding: 0 14px;
+  border-radius: var(--radius); border: 1px solid var(--border);
+  background: var(--surface); color: var(--muted); font-size: 14px;
+}
+.mock .list {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.mock .list-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 15px;
+}
+.mock .list-item:last-child { border-bottom: 0; }
+.mock .list-item .box {
+  width: 18px; height: 18px; border-radius: 5px;
+  border: 2px solid var(--border); flex: none;
+}
+.mock .list-item .box.done { background: var(--accent); border-color: var(--accent); }
+.mock .list-item .done-text { color: var(--muted); text-decoration: line-through; }
+.mock .avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex: none;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+}
+.mock .badge {
+  display: inline-flex; align-items: center; height: 22px; padding: 0 10px;
+  border-radius: 999px; background: var(--bg); border: 1px solid var(--border);
+  color: var(--muted); font-size: 12px; font-weight: 600;
+}
+.mock .badge.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.mock .empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: 48px 24px; text-align: center;
+  border: 1px dashed var(--border); border-radius: var(--radius); color: var(--muted);
+}
+.mock .empty .glyph {
+  width: 48px; height: 48px; border-radius: 14px; background: var(--border);
+}
+
+/* =====================================================================
+   5. MISSING-FILE PLACEHOLDER - shown when a page folder has no web.html
+      or no mobile.html, so the canvas never silently drops a frame
+   ===================================================================== */
+.mock .missing {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; height: 100%; padding: 48px 24px; text-align: center;
+  color: var(--muted); font: 600 22px/1.4 var(--mono); letter-spacing: .04em;
+}
+.mock .missing .file { color: var(--text); font-size: 30px; }
+.mock .missing .hint { font-weight: 500; font-size: 18px; }

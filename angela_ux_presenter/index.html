@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!-- SHELL — do not edit. Pages live in src/pages/, tokens in src/theme/. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App</title>
+<script>
+/* set the theme before first paint so the canvas never flashes the wrong one */
+(function () {
+  var saved = null;
+  try { saved = localStorage.getItem("design-canvas-theme"); } catch (e) { /* ignore */ }
+  var dark = saved ? saved === "dark"
+    : !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+})();
+</script>
+</head>
+
+<body>
+
+<!-- the two toggles (behaviour lives in src/shell/canvas.ts; markup stays here) -->
+<div class="toggles">
+  <div class="toggle" role="group" aria-label="Device preview">
+    <button type="button" id="btn-mobile" aria-pressed="false">MOBILE</button>
+    <button type="button" id="btn-web" aria-pressed="true">WEB</button>
+  </div>
+  <div class="toggle" role="group" aria-label="Colour theme">
+    <button type="button" id="btn-light" aria-pressed="true">LIGHT</button>
+    <button type="button" id="btn-dark" aria-pressed="false">DARK</button>
+  </div>
+</div>
+
+<header class="canvas-header">
+  <p class="eyebrow">UX canvas <span class="sep">/</span> every screen, one sheet</p>
+  <h1 id="app-name">App</h1>
+  <p class="tagline" id="app-tagline"></p>
+  <div class="legend" id="palette" aria-label="Colour palette"></div>
+</header>
+
+<main class="canvas" id="canvas"></main>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

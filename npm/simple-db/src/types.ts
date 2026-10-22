@@ -1,0 +1,319 @@
+/** Every `code` the simple_db service can put in a `{ok:false, code, reason}`
+ *  refusal. Exhaustive as of the 2026-09 review, checked against the
+ *  service's `response_json.rs` — not a guess.
+ *
+ *  `not_found` is the uniform hide: a denied read, a denied write and a row
+ *  that never existed are indistinguishable by design, so never infer
+ *  existence from it. Note the service uses `app_not_found` for the app
+ *  subtree and plain `not_found` for tables and records — two codes, one
+ *  meaning.
+ *
+ *  The three record-write `409`s are only ever answered to a caller allowed
+ *  to make the write, on a row that exists: `key_exists` (a keyed create
+ *  whose submitter already has a row with that key; the thrown
+ *  `PilelyError` carries that row's `id`), `version_conflict` (an
+ *  `ifVersion` that is not the row's `_version`; the error carries
+ *  `currentVersion`) and `condition_failed` (an `if` that does not hold).
+ *
+ *  `email_not_ready` (400) and `email_check_unavailable` (503) are
+ *  `notify/set`'s alone: turning `new_row_email` on needs the app's
+ *  `@simple_email` account to be able to send, and a check that could not
+ *  run changes nothing. `out_of_traffic_credits` (503) is shown to the DB
+ *  owner only, on any route, once their traffic balance is used up.
+ *
+ *  `storage_exceeded` (402) is the owner's storage allowance refusing a
+ *  create, a growing update, an `upload/start` or a file's attach; on the
+ *  file paths every caller but the owner gets the uniform 404 instead.
+ *  `quota_unavailable` (503) means the allowance could not be checked:
+ *  retry shortly. `file_too_large` (413) is an attached upload over 2 GB.
+ *
+ *  `upload_failed` is the one code this package mints itself, never the
+ *  service: the `PUT` of a file's bytes to the storage host was refused
+ *  (its `status` is the storage host's) or never reached it — a network
+ *  failure or a CORS refusal, `status` `0`. Nothing was written. */
+export type SimpleDbErrorCode =
+  | "unauthenticated"
+  | "bad_forwarded_identity"
+  | "bad_request"
+  | "email_not_ready"
+  | "not_found"
+  | "app_not_found"
+  | "db_already_exists"
+  | "table_exists"
+  | "column_exists"
+  | "key_exists"
+  | "version_conflict"
+  | "condition_failed"
+  | "rate_limited"
+  | "internal"
+  | "email_check_unavailable"
+  | "out_of_traffic_credits"
+  | "storage_exceeded"
+  | "quota_unavailable"
+  | "file_too_large"
+  | "upload_failed";
+
+/**
+ * Server-minted fields present on every record. `_submitter_user_id` is the
+ * one reserved column that is not always on the wire: the server strips it
+ * from every row read by a signed-out visitor of an `anon_read` table (an
+ * `anon_read` table must not publish internal user ids to the whole
+ * internet). `_submitter_handle` always stays — a public guestbook shows
+ * who signed it. An app that renders `_submitter_user_id` will find it
+ * `undefined` for exactly its signed-out readers, which is the hardest
+ * case to notice in testing.
+ *
+ * `_version` is `1` on create and one more on every successful update;
+ * detect change with it, never `_updated_at_ms` (two updates in one
+ * millisecond can share a stamp), and send it back as `ifVersion`. `_key`
+ * is the `key` a keyed create gave, verbatim, or `null`; it never changes
+ * and every reader of the row sees it.
+ */
+export interface DbRecord {
+  id: string;
+  _submitter_handle: string;
+  _submitter_user_id?: string;
+  _created_at_ms: number;
+  _updated_at_ms: number;
+  _version: number;
+  _key: string | null;
+}
+
+/** The closed set of column types simple_db accepts. A `file` column holds
+ *  one file per record (`DbFile`), stored on the storage host. */
+export type DbColumnType = "text" | "integer" | "real" | "boolean" | "json" | "file";
+
+/**
+ * A `file` field as every read answers it, or `null` when the field holds
+ * no file. Declare a file column in a record type as `DbFile | null`.
+ * `size_bytes` is the size the storage host received. `url` is present only
+ * on a read made with `fileUrls: true`: a presigned download link valid 5
+ * to 10 minutes, never worth storing. A field never shows an upload id or a
+ * storage key.
+ */
+export interface DbFile {
+  file_id: string;
+  content_type: string;
+  size_bytes: number;
+  url?: string;
+}
+
+/** `upload/start`'s answer: where to `PUT` one file's bytes, and the ticket
+ *  that attaches them to a record. Internal to the one-call write. */
+export interface DbUploadTicket {
+  /** 22 ASCII letters and digits; sent as `{ upload: upload_id }` in the
+   *  file field of the record write. Works once, only for its caller, table
+   *  and column. */
+  upload_id: string;
+  /** A presigned `PUT` link on the storage host, valid 5 minutes, straight
+   *  to the file's own storage: the attach moves nothing. */
+  upload_url: string;
+  /** Epoch milliseconds: the end of `upload_url`'s validity. */
+  expires_at: number;
+}
+
+/** The `download` route's answer: a fresh link for one record's file. */
+export interface DbFileDownload {
+  /** A presigned `GET` on the storage host, valid 5 to 10 minutes. */
+  url: string;
+  content_type: string;
+  size_bytes: number;
+}
+
+export interface DbColumn {
+  name: string;
+  type: DbColumnType;
+}
+
+/** Which rows a non-owner reads: `"all"` (the default) every row their
+ *  `read_group` lets them read; `"own"` only the rows they submitted plus
+ *  the rows whose audience column holds their user id. The owner and the
+ *  app's backend server always read every row. */
+export type DbReadScope = "all" | "own";
+
+/** Which rows a non-owner may update and delete: `"owner"` (the default)
+ *  none; `"own"` the rows they submitted, while `write_group` admits them
+ *  and `deny_group` does not hold them. */
+export type DbMutateScope = "owner" | "own";
+
+/** A table's five row-level settings. Every table carries all five; a
+ *  table that never set them reads the defaults (`"all"`, `null`,
+ *  `"owner"`, `null`, `null`): every permitted reader sees every row and
+ *  only the owner updates and deletes. */
+export interface DbRowAccess {
+  read_scope: DbReadScope;
+  /** A declared `text` column holding the user id a row is addressed to,
+   *  or `null`. Set only at `tables/create`; it never changes. */
+  audience_column: string | null;
+  mutate_scope: DbMutateScope;
+  /** Staff who read every row and update and delete any row. `null` means
+   *  NO group — the opposite of `read_group` / `write_group`, where `null`
+   *  is every user. */
+  mutate_group: string | null;
+  /** Banned users: their creates, updates and deletes answer the uniform
+   *  404; their reads are unchanged. `null` means NO group, as for
+   *  `mutate_group`. */
+  deny_group: string | null;
+}
+
+/** Whether the app's owner is emailed when people other than the owner
+ *  create rows in a table: `"off"` (the default) never; `"each"` soon after,
+ *  at most one email per table per 10 minutes, each counting the rows since
+ *  the last; `"daily"` one digest per UTC day that had new rows. The email
+ *  goes to the owner's account email from the app's `@simple_email` account,
+ *  billed and capped like any send from it, and carries only the count, the
+ *  table, the app and a link — never a row's content. */
+export type NewRowEmail = "off" | "each" | "daily";
+
+/** A sort's state: `"ready"` lists in it; `"building"` (an added sort
+ *  whose existing records are still being filled in) is refused by
+ *  `records/list` until `tables/list` shows it ready. */
+export type DbSortState = "building" | "ready";
+
+/** One of a table's declared sorts, as every table answer shows it. `by`
+ *  is a `text`, `integer`, `real` or `boolean` column, `"_created_at_ms"`
+ *  (creation order) or `"_updated_at_ms"`. */
+export interface DbTableSort {
+  by: string;
+  state: DbSortState;
+}
+
+/** The full table object returned by create/list/columns-add/sorts-set. */
+export interface DbTable extends DbRowAccess {
+  name: string;
+  /** `null` means every user (through the db's app), never "closed". */
+  read_group: string | null;
+  write_group: string | null;
+  anon_read: boolean;
+  /** `"off"` on every table that never set it. Changed only by
+   *  `notify/set`, never by `tables/create` or `access/set`. */
+  new_row_email: NewRowEmail;
+  /** The orders `records/list` reads the table in, 0 to 3, in declaration
+   *  order; the first is the default (descending). Every table created
+   *  without `sorts` has `[{ by: "_created_at_ms", state: "ready" }]`. */
+  sorts: DbTableSort[];
+  created_at_ms: number;
+  columns: DbColumn[];
+}
+
+/** The narrower shape `access/set` answers with — `table` is a name here,
+ *  not the object `create`/`list`/`columns/add` return. */
+export interface DbTableAccess extends DbRowAccess {
+  table: string;
+  read_group: string | null;
+  write_group: string | null;
+  anon_read: boolean;
+}
+
+/** The answer of `notify/set`: the table's name and its `new_row_email`
+ *  after the call. */
+export interface DbTableNewRowEmail {
+  table: string;
+  new_row_email: NewRowEmail;
+}
+
+/** `records/list`'s ANDed equality filters: declared columns by name, plus
+ *  `_submitter_user_id` — a user id, from a signed-in caller only (a
+ *  signed-out one gets `400 bad_request`). Every filter narrows within the
+ *  rows the caller may see. No other reserved field is filterable. */
+export type DbEqFilter = Record<string, unknown> & {
+  _submitter_user_id?: string;
+};
+
+export interface DbApp {
+  app_id: string;
+  owner_handle: string;
+  created_time_stamp: number;
+}
+
+/** Creation order for `records/list`: `"newest"` is `_created_at_ms`
+ *  descending, then `id` descending; `"oldest"` is the exact mirror — the
+ *  same as `sort: { by: "_created_at_ms", dir: "desc" | "asc" }`. It needs
+ *  `_created_at_ms` among the table's sorts. */
+export type DbRecordOrder = "newest" | "oldest";
+
+export type DbSortDir = "asc" | "desc";
+
+/** The order a `records/list` reads in: one of the table's ready sorts,
+ *  ascending or descending. Ascending puts records whose value reads `null`
+ *  first, then the values (`false` before `true`, numbers numerically, text
+ *  by its first 900 bytes, case-sensitive), ties by `id` ascending;
+ *  descending is the exact mirror. Left out, a list reads the table's first
+ *  sort, descending. A cursor continues only the sort and direction that
+ *  issued it. */
+export interface DbSort {
+  by: string;
+  dir: DbSortDir;
+}
+
+/** One column's operators in a `where`, ANDed. Per type: `text` takes every
+ *  one (byte order, case-sensitive; `contains` is a substring); `integer`
+ *  and `real` take `eq ne lt lte gt gte between in is_null`; `boolean`
+ *  takes `eq ne in is_null`; `json` only `eq` and `is_null`; `file` only
+ *  `is_null`. A value must have the column's type and is never `null` (use
+ *  `is_null`). */
+export interface DbWhereOperators {
+  eq?: unknown;
+  ne?: unknown;
+  lt?: string | number;
+  lte?: string | number;
+  gt?: string | number;
+  gte?: string | number;
+  /** `[low, high]`, both ends included; low may not be above high. */
+  between?: [string | number, string | number];
+  /** 1 to 100 values. */
+  in?: unknown[];
+  begins_with?: string;
+  contains?: string;
+  /** `true` matches a field that reads `null`. */
+  is_null?: boolean;
+}
+
+/** A field's entry in a `where`: its operators, or a bare value meaning
+ *  `eq`. */
+export type DbWhereEntry = DbWhereOperators | string | number | boolean | unknown[];
+
+/** `records/list`'s condition, ANDed with `eq`: each key a column (or
+ *  `_created_at_ms`, `_updated_at_ms`, or `_submitter_user_id` from a
+ *  signed-in caller) holding a `DbWhereEntry`, and `and` / `or` (arrays of
+ *  conditions) and `not` (one) combining them. Every value is compared as a
+ *  read returns it: a column never written compares as its declared
+ *  default. A `where` range (`eq lt lte gt gte between`, or `begins_with` on
+ *  a `text` sort) ANDed at the top level on the column the list is sorted
+ *  by reads, and is billed for, only the records in the range; every other
+ *  condition is billed for every record the list reads. */
+export interface DbWhere {
+  and?: DbWhere[];
+  or?: DbWhere[];
+  not?: DbWhere;
+  [field: string]: DbWhereEntry | DbWhere | DbWhere[] | undefined;
+}
+
+/** One part of a `records/list` count. Add up the parts, passing
+ *  `next_cursor` back as `cursor`, until it is `null`; a part may count
+ *  zero while `next_cursor` is a string. */
+export interface DbCountPart {
+  count: number;
+  next_cursor: string | null;
+}
+
+/** One page of `records/list`. `records` can hold fewer than `limit` rows,
+ *  even none, while `next_cursor` is a string: only `null` means no more rows. */
+export interface DbListPage<T> {
+  records: T[];
+  next_cursor: string | null;
+}
+
+/** One page of `tables/list`, oldest table first. `nextCursor` is `null` on
+ *  the last page; otherwise pass it back as `cursor` for the next one. */
+export interface DbTablesPage {
+  tables: DbTable[];
+  nextCursor: string | null;
+}
+
+/** One page of `apps/list`, newest database first. `nextCursor` is `null`
+ *  on the last page; otherwise pass it back as `cursor` for the next one. */
+export interface DbAppsPage {
+  apps: DbApp[];
+  nextCursor: string | null;
+}
