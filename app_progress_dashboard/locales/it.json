@@ -1,0 +1,156 @@
+{
+  "pageTitle": "I progressi della tua app",
+  "appName": "La tua app",
+  "live": "In diretta · aggiornato ora",
+  "offline": "Non connesso · nuovo tentativo in corso",
+  "help": "A cosa serve questa pagina",
+  "language": "Lingua",
+  "theme": {
+    "label": "Tema",
+    "system": "Come il sistema",
+    "light": "Chiaro",
+    "dark": "Scuro"
+  },
+  "about": {
+    "title": "A cosa serve questa pagina",
+    "body": "Questa pagina segue la tua app mentre Pam la costruisce. Si aggiorna da sola, quindi puoi lasciarla aperta.",
+    "p1": "La scheda grande mostra dove sei e cosa viene dopo.",
+    "p2": "«Tocca a te» vuol dire che qualcosa è pronto da aprire e guardare.",
+    "p3": "I pulsanti aprono il tuo design, la tua demo o la tua app online in una nuova scheda.",
+    "p4": "Questa pagina mostra solo i progressi. Per cambiare qualcosa o andare avanti, parla con Pam nella tua chat.",
+    "gotIt": "Ho capito"
+  },
+  "label": {
+    "work": "Al lavoro",
+    "you": "Tocca a te",
+    "talk": "In chat con Pam",
+    "warn": "Da aggiornare",
+    "fin": "Fatto"
+  },
+  "step": "passo {n} di {t}",
+  "there": "{p}% fatto",
+  "nextUp": "Dopo: {s}",
+  "moment": {
+    "idea": {
+      "title": "Parliamo della tua idea",
+      "body": "Racconta a Pam a cosa serve l'app e chi la userà. Non si costruisce niente finché non sei pronto."
+    },
+    "ready": {
+      "title": "Pronti per il passo successivo",
+      "body": "Di' a Pam quando vuoi andare avanti. Non si costruisce niente finché non lo dici."
+    },
+    "dbuild": {
+      "title": "Stiamo disegnando le tue schermate",
+      "body": "Ogni schermata della tua app viene messa su una sola pagina. Pam ti avvisa quando è pronta."
+    },
+    "dready": {
+      "title": "Le tue schermate sono pronte",
+      "body": "Dai un'occhiata. Di' a Pam cosa cambiare, o quando vuoi una demo da provare."
+    },
+    "dredo": {
+      "title": "Le tue schermate vanno aggiornate",
+      "body": "La tua idea è cambiata, quindi le schermate non corrispondono più. Chiedi a Pam di aggiornarle quando vuoi."
+    },
+    "mbuild": {
+      "title": "Stiamo costruendo la tua demo",
+      "body": "Una versione in cui puoi cliccare. Sembra quella vera, ma per ora non salva niente."
+    },
+    "mready": {
+      "title": "La tua demo è pronta",
+      "body": "Provala. Di' a Pam cosa cambiare, o quando vuoi che si costruisca l'app vera."
+    },
+    "mredo": {
+      "title": "La tua demo va aggiornata",
+      "body": "Hai cambiato le schermate, quindi la demo non corrisponde più. Chiedi a Pam di rifarla quando vuoi."
+    },
+    "lbuild": {
+      "title": "Stiamo costruendo la tua app",
+      "body": "La tua app va online con dati veri e accesso. Pam ti avvisa quando è pronta."
+    },
+    "lredo": {
+      "title": "La tua app va aggiornata",
+      "body": "Qualcosa è cambiato da quando l'app è online, quindi non corrisponde più. Chiedi a Pam di aggiornarla quando vuoi."
+    },
+    "live": {
+      "title": "La tua app è online",
+      "body": "È online al suo indirizzo, con dati veri e accesso. Provala."
+    },
+    "access": {
+      "title": "Chi vede cosa",
+      "body": "Si decide chi può vedere e modificare ogni parte della tua app."
+    },
+    "pay": {
+      "title": "Pagamenti, se servono",
+      "body": "Se la tua app riceve pagamenti, Pam ti aiuta a configurarli. Altrimenti questo passo si salta."
+    },
+    "name": {
+      "title": "Scegliamo un nome più bello",
+      "body": "Scegli un indirizzo più corto e l'immagine che si vede quando condividi il tuo link."
+    },
+    "cost": {
+      "title": "Quanto costa tenerla attiva",
+      "body": "Uno sguardo semplice a quanto costa far funzionare la tua app."
+    },
+    "done": {
+      "title": "Tutto pronto",
+      "body": "La tua app è online e lanciata. Torna da Pam quando vuoi per modifiche o nuove funzioni."
+    }
+  },
+  "next": {
+    "design": "Disegnare le schermate",
+    "demo": "Costruire una demo cliccabile",
+    "live": "Mettere online la tua app",
+    "access": "Controllare chi vede cosa",
+    "pay": "Configurare i pagamenti, se servono",
+    "name": "Scegliere un nome più bello",
+    "cost": "Vedere quanto costa",
+    "seeDesign": "Vedere le tue schermate",
+    "seeDemo": "Provare la demo",
+    "seeLive": "Provare la tua app",
+    "redoDesign": "Aggiornare le schermate",
+    "redoDemo": "Rifare la demo",
+    "redoLive": "Aggiornare la tua app"
+  },
+  "button": {
+    "design": "Apri il design",
+    "demo": "Apri la demo",
+    "live": "Apri la tua app",
+    "oldDesign": "Apri il design precedente",
+    "oldDemo": "Apri la demo precedente"
+  },
+  "newTab": "si apre in una nuova scheda",
+  "notRunning": "non è attivo, chiedi a Pam di riaprirlo",
+  "down": {
+    "design": "Il tuo design non è attivo in questo momento. Chiedi a Pam di riaprirlo.",
+    "demo": "La tua demo non è attiva in questo momento. Chiedi a Pam di riaprirla."
+  },
+  "afterLive": {
+    "title": "La tua app è pronta",
+    "body": "Chiedi a Pam modifiche o nuove funzioni quando vuoi, e la tua app si aggiorna direttamente. Questa pagina non segue quelle modifiche. Continua a seguire gli ultimi passaggi di configurazione qui sotto.",
+    "setTitle": "La tua app è tutta pronta",
+    "setBody": "Chiedi a Pam modifiche o nuove funzioni quando vuoi, e la tua app si aggiorna direttamente. Questa pagina non segue quelle modifiche, quindi ora puoi chiuderla."
+  },
+  "steps": {
+    "all": "Tutti i passi",
+    "after": "Dopo il lancio"
+  },
+  "row": {
+    "idea": "La tua idea",
+    "design": "Design",
+    "demo": "Demo",
+    "live": "App online",
+    "access": "Chi vede cosa",
+    "pay": "Pagamenti",
+    "name": "Nome e anteprima del link",
+    "cost": "Quanto costa"
+  },
+  "payHint": "(solo se la tua app riceve pagamenti)",
+  "pill": {
+    "done": "Fatto",
+    "now": "Sei qui",
+    "redo": "Da aggiornare",
+    "skip": "Non serve",
+    "next": "Dopo"
+  },
+  "footer": "Per cambiare qualcosa o andare avanti, parla con Pam nella tua chat"
+}

@@ -1,0 +1,156 @@
+{
+  "pageTitle": "Uygulamanın ilerlemesi",
+  "appName": "Uygulaman",
+  "live": "Canlı · az önce güncellendi",
+  "offline": "Bağlantı yok · yeniden deneniyor",
+  "help": "Bu sayfa nedir",
+  "language": "Dil",
+  "theme": {
+    "label": "Tema",
+    "system": "Sisteme uy",
+    "light": "Açık",
+    "dark": "Koyu"
+  },
+  "about": {
+    "title": "Bu sayfa nedir",
+    "body": "Bu sayfa, Pam uygulamanı yaparken onu takip eder. Kendi kendine güncellenir, açık bırakabilirsin.",
+    "p1": "Büyük kart nerede olduğunu ve sırada ne olduğunu gösterir.",
+    "p2": "“Sıra sende”, açıp bakman için bir şeyin hazır olduğu anlamına gelir.",
+    "p3": "Düğmeler tasarımını, demonu ya da yayındaki uygulamanı yeni bir sekmede açar.",
+    "p4": "Bu sayfa yalnızca ilerlemeyi gösterir. Bir şeyi değiştirmek ya da ilerlemek için sohbette Pam ile konuş.",
+    "gotIt": "Anladım"
+  },
+  "label": {
+    "work": "Üzerinde çalışılıyor",
+    "you": "Sıra sende",
+    "talk": "Pam ile konuşuluyor",
+    "warn": "Güncellenmesi gerekiyor",
+    "fin": "Tamam"
+  },
+  "step": "adım {n} / {t}",
+  "there": "%{p} tamam",
+  "nextUp": "Sırada: {s}",
+  "moment": {
+    "idea": {
+      "title": "Fikrini konuşuyoruz",
+      "body": "Uygulamanın ne için olduğunu ve kimin kullanacağını Pam'e anlat. Sen hazır olana kadar hiçbir şey yapılmaz."
+    },
+    "ready": {
+      "title": "Sonraki adıma hazır",
+      "body": "Devam etmek istediğinde Pam'e söyle. Sen söyleyene kadar hiçbir şey yapılmaz."
+    },
+    "dbuild": {
+      "title": "Ekranların tasarlanıyor",
+      "body": "Uygulamanın tüm ekranları tek bir sayfaya yerleştiriliyor. Hazır olunca Pam haber verir."
+    },
+    "dready": {
+      "title": "Ekranların hazır",
+      "body": "Bir göz at. Neyin değişeceğini Pam'e söyle ya da tıklanabilir bir demo istediğinde haber ver."
+    },
+    "dredo": {
+      "title": "Ekranlarının güncellenmesi gerekiyor",
+      "body": "Fikrin değişti, bu yüzden ekranlar artık ona uymuyor. Hazır olduğunda Pam'den güncellemesini iste."
+    },
+    "mbuild": {
+      "title": "Demon yapılıyor",
+      "body": "İçinde gezinebileceğin bir sürüm. Gerçeği gibi görünür ama henüz hiçbir şey kaydetmez."
+    },
+    "mready": {
+      "title": "Demon hazır",
+      "body": "İçinde gezin. Neyin değişeceğini Pam'e söyle ya da gerçek uygulamanın ne zaman yapılacağını haber ver."
+    },
+    "mredo": {
+      "title": "Demonun güncellenmesi gerekiyor",
+      "body": "Ekranları değiştirdin, bu yüzden demo artık onlara uymuyor. Hazır olduğunda Pam'den yeniden yapmasını iste."
+    },
+    "lbuild": {
+      "title": "Uygulaman yapılıyor",
+      "body": "Uygulaman gerçek veriler ve girişle yayına alınıyor. Hazır olunca Pam haber verir."
+    },
+    "lredo": {
+      "title": "Uygulamanın güncellenmesi gerekiyor",
+      "body": "Uygulaman yayına girdiğinden beri bir şey değişti, artık uymuyor. Hazır olduğunda Pam'den güncellemesini iste."
+    },
+    "live": {
+      "title": "Uygulaman yayında",
+      "body": "Kendi adresinde, gerçek veriler ve girişle çalışıyor. Bir dene."
+    },
+    "access": {
+      "title": "Kim neyi görebilir",
+      "body": "Uygulamanın her bölümünü kimin görüp değiştirebileceğine karar veriliyor."
+    },
+    "pay": {
+      "title": "Ödemeler, gerekirse",
+      "body": "Uygulaman ödeme alıyorsa Pam kurmana yardım eder. Almıyorsa bu adım atlanır."
+    },
+    "name": {
+      "title": "Daha güzel bir ad seçiliyor",
+      "body": "Daha kısa bir adres ve bağlantın paylaşıldığında görünen resmi seç."
+    },
+    "cost": {
+      "title": "Çalıştırmanın maliyeti",
+      "body": "Uygulamanı çalışır tutmanın ne kadara mal olduğuna basit bir bakış."
+    },
+    "done": {
+      "title": "Her şey hazır",
+      "body": "Uygulaman yayında ve başladı. Değişiklik ya da yeni özellik için istediğin zaman Pam'e dön."
+    }
+  },
+  "next": {
+    "design": "Ekranları tasarlamak",
+    "demo": "Tıklanabilir bir demo yapmak",
+    "live": "Uygulamanı yayına almak",
+    "access": "Kimin neyi gördüğüne bakmak",
+    "pay": "Gerekirse ödemeleri kurmak",
+    "name": "Daha güzel bir ad seçmek",
+    "cost": "Maliyete bakmak",
+    "seeDesign": "Ekranlarını görmek",
+    "seeDemo": "Demoyu denemek",
+    "seeLive": "Uygulamanı denemek",
+    "redoDesign": "Ekranları güncellemek",
+    "redoDemo": "Demoyu yeniden yapmak",
+    "redoLive": "Uygulamanı güncellemek"
+  },
+  "button": {
+    "design": "Tasarımı aç",
+    "demo": "Demoyu aç",
+    "live": "Uygulamanı aç",
+    "oldDesign": "Önceki tasarımı aç",
+    "oldDemo": "Önceki demoyu aç"
+  },
+  "newTab": "yeni sekmede açılır",
+  "notRunning": "çalışmıyor, Pam'den yeniden açmasını iste",
+  "down": {
+    "design": "Tasarımın şu anda çalışmıyor. Pam'den yeniden açmasını iste.",
+    "demo": "Demon şu anda çalışmıyor. Pam'den yeniden açmasını iste."
+  },
+  "afterLive": {
+    "title": "Uygulamanız hazır",
+    "body": "İstediğiniz zaman Pam'den değişiklik ya da yeni özellik isteyin; uygulamanız hemen güncellenir. Bu sayfa bu değişiklikleri takip etmez. Aşağıdaki son birkaç kurulum adımını takip etmeye devam eder.",
+    "setTitle": "Uygulamanız tamamen hazır",
+    "setBody": "İstediğiniz zaman Pam'den değişiklik ya da yeni özellik isteyin; uygulamanız hemen güncellenir. Bu sayfa bu değişiklikleri takip etmez, artık kapatabilirsiniz."
+  },
+  "steps": {
+    "all": "Tüm adımlar",
+    "after": "Yayından sonra"
+  },
+  "row": {
+    "idea": "Fikrin",
+    "design": "Tasarım",
+    "demo": "Demo",
+    "live": "Yayındaki uygulama",
+    "access": "Kim neyi görebilir",
+    "pay": "Ödemeler",
+    "name": "Ad ve bağlantı önizlemesi",
+    "cost": "Çalıştırma maliyeti"
+  },
+  "payHint": "(yalnızca uygulaman ödeme alıyorsa)",
+  "pill": {
+    "done": "Tamam",
+    "now": "Buradasın",
+    "redo": "Güncellenmeli",
+    "skip": "Gerekmiyor",
+    "next": "Sırada"
+  },
+  "footer": "Bir şeyi değiştirmek ya da ilerlemek için sohbette Pam ile konuş"
+}

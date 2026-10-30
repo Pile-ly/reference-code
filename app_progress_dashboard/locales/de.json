@@ -1,0 +1,156 @@
+{
+  "pageTitle": "Der Fortschritt deiner App",
+  "appName": "Deine App",
+  "live": "Live · gerade aktualisiert",
+  "offline": "Keine Verbindung · neuer Versuch läuft",
+  "help": "Was diese Seite ist",
+  "language": "Sprache",
+  "theme": {
+    "label": "Design",
+    "system": "Wie das System",
+    "light": "Hell",
+    "dark": "Dunkel"
+  },
+  "about": {
+    "title": "Was diese Seite ist",
+    "body": "Diese Seite verfolgt deine App, während Pam sie baut. Sie aktualisiert sich von selbst, du kannst sie also offen lassen.",
+    "p1": "Die große Karte zeigt, wo du stehst und was als Nächstes kommt.",
+    "p2": "„Du bist dran“ heißt, dass etwas bereitsteht, das du öffnen und ansehen kannst.",
+    "p3": "Die Knöpfe öffnen deinen Entwurf, deine Demo oder deine veröffentlichte App in einem neuen Tab.",
+    "p4": "Diese Seite zeigt nur den Fortschritt. Um etwas zu ändern oder weiterzumachen, sprich im Chat mit Pam.",
+    "gotIt": "Verstanden"
+  },
+  "label": {
+    "work": "In Arbeit",
+    "you": "Du bist dran",
+    "talk": "Im Gespräch mit Pam",
+    "warn": "Braucht ein Update",
+    "fin": "Fertig"
+  },
+  "step": "Schritt {n} von {t}",
+  "there": "{p} % geschafft",
+  "nextUp": "Als Nächstes: {s}",
+  "moment": {
+    "idea": {
+      "title": "Wir besprechen deine Idee",
+      "body": "Erzähl Pam, wofür die App ist und wer sie nutzen wird. Es wird nichts gebaut, bevor du bereit bist."
+    },
+    "ready": {
+      "title": "Bereit für den nächsten Schritt",
+      "body": "Sag Pam, wann es weitergehen soll. Es wird nichts gebaut, bevor du es sagst."
+    },
+    "dbuild": {
+      "title": "Deine Bildschirme werden gestaltet",
+      "body": "Alle Bildschirme deiner App werden auf einer Seite angeordnet. Pam sagt dir Bescheid, wenn es fertig ist."
+    },
+    "dready": {
+      "title": "Deine Bildschirme sind fertig",
+      "body": "Schau sie dir an. Sag Pam, was sich ändern soll, oder wann du eine klickbare Demo möchtest."
+    },
+    "dredo": {
+      "title": "Deine Bildschirme brauchen ein Update",
+      "body": "Deine Idee hat sich geändert, die Bildschirme passen nicht mehr dazu. Bitte Pam um ein Update, wenn du so weit bist."
+    },
+    "mbuild": {
+      "title": "Deine Demo wird gebaut",
+      "body": "Eine Version zum Durchklicken. Sie sieht aus wie die echte, speichert aber noch nichts."
+    },
+    "mready": {
+      "title": "Deine Demo ist fertig",
+      "body": "Klick dich durch. Sag Pam, was sich ändern soll, oder wann die echte App gebaut werden soll."
+    },
+    "mredo": {
+      "title": "Deine Demo braucht ein Update",
+      "body": "Du hast die Bildschirme geändert, die Demo passt nicht mehr dazu. Bitte Pam, sie neu zu bauen, wenn du so weit bist."
+    },
+    "lbuild": {
+      "title": "Deine App wird gebaut",
+      "body": "Deine App geht online, mit echten Daten und Anmeldung. Pam sagt dir Bescheid, wenn es fertig ist."
+    },
+    "lredo": {
+      "title": "Deine App braucht ein Update",
+      "body": "Seit deine App online ist, hat sich etwas geändert, sie passt nicht mehr dazu. Bitte Pam um ein Update, wenn du so weit bist."
+    },
+    "live": {
+      "title": "Deine App ist online",
+      "body": "Sie läuft unter ihrer eigenen Adresse, mit echten Daten und Anmeldung. Probier sie aus."
+    },
+    "access": {
+      "title": "Wer was sehen darf",
+      "body": "Es wird festgelegt, wer jeden Teil deiner App sehen und ändern darf."
+    },
+    "pay": {
+      "title": "Zahlungen, falls nötig",
+      "body": "Wenn deine App Zahlungen annimmt, hilft dir Pam beim Einrichten. Sonst wird dieser Schritt übersprungen."
+    },
+    "name": {
+      "title": "Ein schönerer Name",
+      "body": "Wähle eine kürzere Adresse und das Bild, das man sieht, wenn dein Link geteilt wird."
+    },
+    "cost": {
+      "title": "Was der Betrieb kostet",
+      "body": "Ein einfacher Blick darauf, was es kostet, deine App am Laufen zu halten."
+    },
+    "done": {
+      "title": "Alles fertig",
+      "body": "Deine App ist online und gestartet. Komm jederzeit zu Pam zurück, wenn du Änderungen oder neue Funktionen möchtest."
+    }
+  },
+  "next": {
+    "design": "Die Bildschirme gestalten",
+    "demo": "Eine klickbare Demo bauen",
+    "live": "Deine App online bringen",
+    "access": "Prüfen, wer was sehen darf",
+    "pay": "Zahlungen einrichten, falls nötig",
+    "name": "Einen schöneren Namen wählen",
+    "cost": "Sehen, was der Betrieb kostet",
+    "seeDesign": "Deine Bildschirme ansehen",
+    "seeDemo": "Die Demo ausprobieren",
+    "seeLive": "Deine App ausprobieren",
+    "redoDesign": "Die Bildschirme aktualisieren",
+    "redoDemo": "Die Demo neu bauen",
+    "redoLive": "Deine App aktualisieren"
+  },
+  "button": {
+    "design": "Entwurf öffnen",
+    "demo": "Demo öffnen",
+    "live": "Deine App öffnen",
+    "oldDesign": "Alten Entwurf öffnen",
+    "oldDemo": "Alte Demo öffnen"
+  },
+  "newTab": "öffnet sich in einem neuen Tab",
+  "notRunning": "läuft nicht, bitte Pam, es wieder zu öffnen",
+  "down": {
+    "design": "Dein Entwurf läuft gerade nicht. Bitte Pam, ihn wieder zu öffnen.",
+    "demo": "Deine Demo läuft gerade nicht. Bitte Pam, sie wieder zu öffnen."
+  },
+  "afterLive": {
+    "title": "Deine App ist fertig",
+    "body": "Bitte Pam jederzeit um Änderungen oder neue Funktionen, und deine App wird direkt aktualisiert. Diese Seite verfolgt diese Änderungen nicht. Sie begleitet weiter die letzten Einrichtungsschritte unten.",
+    "setTitle": "Deine App ist komplett eingerichtet",
+    "setBody": "Bitte Pam jederzeit um Änderungen oder neue Funktionen, und deine App wird direkt aktualisiert. Diese Seite verfolgt diese Änderungen nicht, du kannst sie also jetzt schließen."
+  },
+  "steps": {
+    "all": "Alle Schritte",
+    "after": "Nach dem Start"
+  },
+  "row": {
+    "idea": "Deine Idee",
+    "design": "Entwurf",
+    "demo": "Demo",
+    "live": "App online",
+    "access": "Wer was sehen darf",
+    "pay": "Zahlungen",
+    "name": "Name und Linkvorschau",
+    "cost": "Was der Betrieb kostet"
+  },
+  "payHint": "(nur wenn deine App Zahlungen annimmt)",
+  "pill": {
+    "done": "Fertig",
+    "now": "Du bist hier",
+    "redo": "Update nötig",
+    "skip": "Nicht nötig",
+    "next": "Als Nächstes"
+  },
+  "footer": "Um etwas zu ändern oder weiterzumachen, sprich im Chat mit Pam"
+}

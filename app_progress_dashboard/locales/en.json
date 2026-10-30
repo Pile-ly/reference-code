@@ -1,0 +1,156 @@
+{
+  "pageTitle": "Your app's progress",
+  "appName": "Your app",
+  "live": "Live · updated just now",
+  "offline": "Not connected · trying again",
+  "help": "What this page is",
+  "language": "Language",
+  "theme": {
+    "label": "Theme",
+    "system": "Match system",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "about": {
+    "title": "What this page is",
+    "body": "This page follows your app as Pam builds it. It updates by itself, so you can leave it open.",
+    "p1": "The big card shows where you are and what comes next.",
+    "p2": "\"Your turn\" means something is ready for you to open and look at.",
+    "p3": "Buttons open your design, your demo or your live app in a new tab.",
+    "p4": "This page only shows progress. To change anything or move on, talk to Pam in your chat.",
+    "gotIt": "Got it"
+  },
+  "label": {
+    "work": "Working on it",
+    "you": "Your turn",
+    "talk": "Chatting with Pam",
+    "warn": "Needs an update",
+    "fin": "Done"
+  },
+  "step": "step {n} of {t}",
+  "there": "{p}% there",
+  "nextUp": "Next: {s}",
+  "moment": {
+    "idea": {
+      "title": "Talking through your idea",
+      "body": "Tell Pam what the app is for and who will use it. Nothing gets made until you're ready."
+    },
+    "ready": {
+      "title": "Ready for the next step",
+      "body": "Tell Pam when you'd like to go on. Nothing gets made until you say so."
+    },
+    "dbuild": {
+      "title": "Designing your screens",
+      "body": "Laying out every screen of your app on one page. Pam will let you know when it's ready."
+    },
+    "dready": {
+      "title": "Your screens are ready",
+      "body": "Have a look. Tell Pam what to change, or say when you'd like a demo you can click through."
+    },
+    "dredo": {
+      "title": "Your screens need an update",
+      "body": "Your idea changed, so the screens don't match it anymore. Ask Pam to update them when you're ready."
+    },
+    "mbuild": {
+      "title": "Building your demo",
+      "body": "A version you can click through. It looks like the real thing, but nothing is saved yet."
+    },
+    "mready": {
+      "title": "Your demo is ready",
+      "body": "Click through it. Tell Pam what to change, or say when you'd like the real app built."
+    },
+    "mredo": {
+      "title": "Your demo needs an update",
+      "body": "You changed the screens, so the demo doesn't match them anymore. Ask Pam to rebuild it when you're ready."
+    },
+    "lbuild": {
+      "title": "Building your app",
+      "body": "Putting your app online with real data and sign-in. Pam will let you know when it's ready."
+    },
+    "lredo": {
+      "title": "Your app needs an update",
+      "body": "Something changed since your app went online, so it doesn't match anymore. Ask Pam to update it when you're ready."
+    },
+    "live": {
+      "title": "Your app is live",
+      "body": "It's online at its own address, with real data and sign-in. Give it a try."
+    },
+    "access": {
+      "title": "Checking who can see what",
+      "body": "Deciding who can see and change each part of your app."
+    },
+    "pay": {
+      "title": "Payments, if you need them",
+      "body": "If your app takes payments, Pam helps you set them up. If not, this step is skipped."
+    },
+    "name": {
+      "title": "Picking a nicer name",
+      "body": "Choose a shorter address and the picture people see when your link is shared."
+    },
+    "cost": {
+      "title": "Seeing what it costs to run",
+      "body": "A plain look at what your app costs to keep running."
+    },
+    "done": {
+      "title": "Everything's set",
+      "body": "Your app is live and launched. Come back to Pam any time for changes or new features."
+    }
+  },
+  "next": {
+    "design": "Design the screens",
+    "demo": "Build a clickable demo",
+    "live": "Put your app online",
+    "access": "Check who can see what",
+    "pay": "Set up payments, if needed",
+    "name": "Pick a nicer name",
+    "cost": "See what it costs to run",
+    "seeDesign": "See your screens",
+    "seeDemo": "Try the demo",
+    "seeLive": "Try your app",
+    "redoDesign": "Update the screens",
+    "redoDemo": "Rebuild the demo",
+    "redoLive": "Update your app"
+  },
+  "button": {
+    "design": "Open design",
+    "demo": "Open demo",
+    "live": "Open your app",
+    "oldDesign": "Open old design",
+    "oldDemo": "Open old demo"
+  },
+  "newTab": "opens in a new tab",
+  "notRunning": "not running, ask Pam to reopen it",
+  "down": {
+    "design": "Your design isn't running right now. Ask Pam to reopen it.",
+    "demo": "Your demo isn't running right now. Ask Pam to reopen it."
+  },
+  "afterLive": {
+    "title": "Your app is built",
+    "body": "Ask Pam for changes or new features any time, and your app updates in place. This page doesn't track those changes. It keeps following the last few setup steps below.",
+    "setTitle": "Your app is all set",
+    "setBody": "Ask Pam for changes or new features any time, and your app updates in place. This page doesn't track those changes, so you can close it now."
+  },
+  "steps": {
+    "all": "All steps",
+    "after": "After it's live"
+  },
+  "row": {
+    "idea": "Your idea",
+    "design": "Design",
+    "demo": "Demo",
+    "live": "Live app",
+    "access": "Who can see what",
+    "pay": "Payments",
+    "name": "Name and link preview",
+    "cost": "What it costs to run"
+  },
+  "payHint": "(only if your app takes payments)",
+  "pill": {
+    "done": "Done",
+    "now": "You're here",
+    "redo": "Needs update",
+    "skip": "Not needed",
+    "next": "Next"
+  },
+  "footer": "To change anything or move on, talk to Pam in your chat"
+}

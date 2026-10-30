@@ -1,0 +1,156 @@
+{
+  "pageTitle": "Fremdriften til appen din",
+  "appName": "Appen din",
+  "live": "Live · oppdatert akkurat nå",
+  "offline": "Ingen forbindelse · prøver igjen",
+  "help": "Hva denne siden er",
+  "language": "Språk",
+  "theme": {
+    "label": "Tema",
+    "system": "Som systemet",
+    "light": "Lyst",
+    "dark": "Mørkt"
+  },
+  "about": {
+    "title": "Hva denne siden er",
+    "body": "Denne siden følger appen din mens Pam bygger den. Den oppdaterer seg selv, så du kan la den stå åpen.",
+    "p1": "Det store kortet viser hvor du er og hva som kommer etterpå.",
+    "p2": "«Din tur» betyr at noe er klart for at du åpner det og ser på det.",
+    "p3": "Knappene åpner designet ditt, demoen din eller appen din på nett i en ny fane.",
+    "p4": "Denne siden viser bare fremdriften. For å endre noe eller gå videre, snakk med Pam i chatten din.",
+    "gotIt": "Skjønner"
+  },
+  "label": {
+    "work": "Jobber med det",
+    "you": "Din tur",
+    "talk": "Prater med Pam",
+    "warn": "Må oppdateres",
+    "fin": "Ferdig"
+  },
+  "step": "steg {n} av {t}",
+  "there": "{p} % gjort",
+  "nextUp": "Neste: {s}",
+  "moment": {
+    "idea": {
+      "title": "Vi snakker om ideen din",
+      "body": "Fortell Pam hva appen er til og hvem som skal bruke den. Ingenting blir laget før du er klar."
+    },
+    "ready": {
+      "title": "Klar for neste steg",
+      "body": "Si fra til Pam når du vil gå videre. Ingenting blir laget før du sier fra."
+    },
+    "dbuild": {
+      "title": "Skjermene dine blir designet",
+      "body": "Alle skjermene i appen din legges ut på én side. Pam sier fra når det er klart."
+    },
+    "dready": {
+      "title": "Skjermene dine er klare",
+      "body": "Ta en titt. Si til Pam hva som skal endres, eller når du vil ha en demo du kan klikke deg gjennom."
+    },
+    "dredo": {
+      "title": "Skjermene dine må oppdateres",
+      "body": "Ideen din har endret seg, så skjermene passer ikke lenger. Be Pam oppdatere dem når du er klar."
+    },
+    "mbuild": {
+      "title": "Demoen din blir bygget",
+      "body": "En versjon du kan klikke deg gjennom. Den ser ekte ut, men lagrer ingenting ennå."
+    },
+    "mready": {
+      "title": "Demoen din er klar",
+      "body": "Klikk deg gjennom. Si til Pam hva som skal endres, eller når den ekte appen skal bygges."
+    },
+    "mredo": {
+      "title": "Demoen din må oppdateres",
+      "body": "Du har endret skjermene, så demoen passer ikke lenger. Be Pam bygge den på nytt når du er klar."
+    },
+    "lbuild": {
+      "title": "Appen din blir bygget",
+      "body": "Appen din kommer på nett med ekte data og innlogging. Pam sier fra når det er klart."
+    },
+    "lredo": {
+      "title": "Appen din må oppdateres",
+      "body": "Noe har endret seg siden appen kom på nett, så den passer ikke lenger. Be Pam oppdatere den når du er klar."
+    },
+    "live": {
+      "title": "Appen din er på nett",
+      "body": "Den er på nett på sin egen adresse, med ekte data og innlogging. Prøv den."
+    },
+    "access": {
+      "title": "Hvem som kan se hva",
+      "body": "Vi bestemmer hvem som kan se og endre hver del av appen din."
+    },
+    "pay": {
+      "title": "Betalinger, hvis du trenger dem",
+      "body": "Hvis appen din tar imot betalinger, hjelper Pam deg med å sette dem opp. Hvis ikke, hoppes dette steget over."
+    },
+    "name": {
+      "title": "Vi velger et finere navn",
+      "body": "Velg en kortere adresse og bildet folk ser når lenken din deles."
+    },
+    "cost": {
+      "title": "Hva det koster å drive",
+      "body": "En enkel titt på hva det koster å holde appen din i gang."
+    },
+    "done": {
+      "title": "Alt er klart",
+      "body": "Appen din er på nett og lansert. Kom tilbake til Pam når som helst for endringer eller nye funksjoner."
+    }
+  },
+  "next": {
+    "design": "Designe skjermene",
+    "demo": "Bygge en klikkbar demo",
+    "live": "Få appen din på nett",
+    "access": "Se hvem som kan se hva",
+    "pay": "Sette opp betalinger, om nødvendig",
+    "name": "Velge et finere navn",
+    "cost": "Se hva det koster",
+    "seeDesign": "Se skjermene dine",
+    "seeDemo": "Prøve demoen",
+    "seeLive": "Prøve appen din",
+    "redoDesign": "Oppdatere skjermene",
+    "redoDemo": "Bygge demoen på nytt",
+    "redoLive": "Oppdatere appen din"
+  },
+  "button": {
+    "design": "Åpne design",
+    "demo": "Åpne demo",
+    "live": "Åpne appen din",
+    "oldDesign": "Åpne forrige design",
+    "oldDemo": "Åpne forrige demo"
+  },
+  "newTab": "åpnes i en ny fane",
+  "notRunning": "kjører ikke, be Pam åpne det igjen",
+  "down": {
+    "design": "Designet ditt kjører ikke akkurat nå. Be Pam åpne det igjen.",
+    "demo": "Demoen din kjører ikke akkurat nå. Be Pam åpne den igjen."
+  },
+  "afterLive": {
+    "title": "Appen din er ferdig",
+    "body": "Be Pam om endringer eller nye funksjoner når du vil, og appen din oppdateres med en gang. Denne siden følger ikke de endringene. Den følger fortsatt de siste oppsettstegene nedenfor.",
+    "setTitle": "Appen din er helt klar",
+    "setBody": "Be Pam om endringer eller nye funksjoner når du vil, og appen din oppdateres med en gang. Denne siden følger ikke de endringene, så du kan lukke den nå."
+  },
+  "steps": {
+    "all": "Alle steg",
+    "after": "Etter lanseringen"
+  },
+  "row": {
+    "idea": "Ideen din",
+    "design": "Design",
+    "demo": "Demo",
+    "live": "Appen på nett",
+    "access": "Hvem som kan se hva",
+    "pay": "Betalinger",
+    "name": "Navn og lenkevisning",
+    "cost": "Hva det koster"
+  },
+  "payHint": "(bare hvis appen din tar imot betalinger)",
+  "pill": {
+    "done": "Ferdig",
+    "now": "Du er her",
+    "redo": "Må oppdateres",
+    "skip": "Ikke nødvendig",
+    "next": "Neste"
+  },
+  "footer": "For å endre noe eller gå videre, snakk med Pam i chatten din"
+}

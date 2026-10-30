@@ -1,0 +1,54 @@
+/* The reference look: a pill, the app's ink, one line of text.
+ *
+ * This is a starting point, not a brand mark — the sign-in button wears the
+ * app's own button style, exactly like every other button on the page. What
+ * has to stay constant across apps is the NAME on it ("Login with Pilely"),
+ * not the skin. An app that already has a `.btn` uses that instead and drops
+ * this file.
+ *
+ * Every color reads a theme token with a fallback, so the button inherits an
+ * app's palette (light and dark) if one is defined and still looks right when
+ * dropped into a page that defines nothing.
+ */
+
+.pilely-signin {
+  --_ink: var(--ink, #1a1a1a);
+  --_on-ink: var(--on-ink, #ffffff);
+  --_hairline: var(--hairline, #e8e4de);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--_ink);
+  border-radius: 999px;
+  background: var(--_ink);
+  color: var(--_on-ink);
+  padding: 7px 16px;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* The quieter variant — for a nav bar, where sign-in sits beside other
+   controls and shouldn't be the loudest thing on the page. */
+.pilely-signin.ghost {
+  background: transparent;
+  color: var(--_ink);
+  border-color: var(--_hairline);
+}
+
+.pilely-signin.ghost:hover {
+  border-color: var(--_ink);
+}
+
+.pilely-signin:focus-visible {
+  outline: 2px solid var(--accent, #d4562e);
+  outline-offset: 2px;
+}
+
+.pilely-signin:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

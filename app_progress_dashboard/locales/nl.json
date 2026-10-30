@@ -1,0 +1,156 @@
+{
+  "pageTitle": "De voortgang van je app",
+  "appName": "Je app",
+  "live": "Live · net bijgewerkt",
+  "offline": "Geen verbinding · opnieuw proberen",
+  "help": "Wat deze pagina is",
+  "language": "Taal",
+  "theme": {
+    "label": "Thema",
+    "system": "Zoals het systeem",
+    "light": "Licht",
+    "dark": "Donker"
+  },
+  "about": {
+    "title": "Wat deze pagina is",
+    "body": "Deze pagina volgt je app terwijl Pam hem bouwt. Hij werkt zichzelf bij, dus je kunt hem open laten.",
+    "p1": "De grote kaart laat zien waar je bent en wat er daarna komt.",
+    "p2": "‘Jij bent aan de beurt’ betekent dat er iets klaarstaat om te openen en te bekijken.",
+    "p3": "Knoppen openen je ontwerp, je demo of je live app in een nieuw tabblad.",
+    "p4": "Deze pagina laat alleen de voortgang zien. Om iets te veranderen of verder te gaan, praat je met Pam in je chat.",
+    "gotIt": "Begrepen"
+  },
+  "label": {
+    "work": "Bezig",
+    "you": "Jij bent aan de beurt",
+    "talk": "In gesprek met Pam",
+    "warn": "Moet bijgewerkt worden",
+    "fin": "Klaar"
+  },
+  "step": "stap {n} van {t}",
+  "there": "{p}% gedaan",
+  "nextUp": "Hierna: {s}",
+  "moment": {
+    "idea": {
+      "title": "We praten over je idee",
+      "body": "Vertel Pam waar de app voor is en wie hem gaat gebruiken. Er wordt niets gemaakt tot je er klaar voor bent."
+    },
+    "ready": {
+      "title": "Klaar voor de volgende stap",
+      "body": "Zeg Pam wanneer je verder wilt. Er wordt niets gemaakt tot je het zegt."
+    },
+    "dbuild": {
+      "title": "Je schermen worden ontworpen",
+      "body": "Alle schermen van je app komen op één pagina. Pam laat het je weten als het klaar is."
+    },
+    "dready": {
+      "title": "Je schermen zijn klaar",
+      "body": "Kijk eens. Zeg Pam wat er anders moet, of wanneer je een demo wilt om doorheen te klikken."
+    },
+    "dredo": {
+      "title": "Je schermen moeten bijgewerkt worden",
+      "body": "Je idee is veranderd, dus de schermen passen er niet meer bij. Vraag Pam ze bij te werken wanneer je wilt."
+    },
+    "mbuild": {
+      "title": "Je demo wordt gebouwd",
+      "body": "Een versie waar je doorheen kunt klikken. Hij lijkt echt, maar slaat nog niets op."
+    },
+    "mready": {
+      "title": "Je demo is klaar",
+      "body": "Klik er doorheen. Zeg Pam wat er anders moet, of wanneer de echte app gebouwd mag worden."
+    },
+    "mredo": {
+      "title": "Je demo moet bijgewerkt worden",
+      "body": "Je hebt de schermen veranderd, dus de demo past er niet meer bij. Vraag Pam hem opnieuw te bouwen wanneer je wilt."
+    },
+    "lbuild": {
+      "title": "Je app wordt gebouwd",
+      "body": "Je app gaat online, met echte gegevens en inloggen. Pam laat het je weten als het klaar is."
+    },
+    "lredo": {
+      "title": "Je app moet bijgewerkt worden",
+      "body": "Er is iets veranderd sinds je app online ging, dus hij past er niet meer bij. Vraag Pam hem bij te werken wanneer je wilt."
+    },
+    "live": {
+      "title": "Je app is live",
+      "body": "Hij staat online op zijn eigen adres, met echte gegevens en inloggen. Probeer hem uit."
+    },
+    "access": {
+      "title": "Wie wat mag zien",
+      "body": "We bepalen wie elk deel van je app mag zien en veranderen."
+    },
+    "pay": {
+      "title": "Betalingen, als je ze nodig hebt",
+      "body": "Als je app betalingen ontvangt, helpt Pam je ze in te stellen. Zo niet, dan wordt deze stap overgeslagen."
+    },
+    "name": {
+      "title": "Een mooiere naam kiezen",
+      "body": "Kies een korter adres en de afbeelding die mensen zien als je link gedeeld wordt."
+    },
+    "cost": {
+      "title": "Wat het kost om te draaien",
+      "body": "Een eenvoudige blik op wat het kost om je app draaiende te houden."
+    },
+    "done": {
+      "title": "Alles is klaar",
+      "body": "Je app is live en gelanceerd. Kom altijd terug bij Pam voor wijzigingen of nieuwe functies."
+    }
+  },
+  "next": {
+    "design": "De schermen ontwerpen",
+    "demo": "Een klikbare demo bouwen",
+    "live": "Je app online zetten",
+    "access": "Bekijken wie wat mag zien",
+    "pay": "Betalingen instellen, als het nodig is",
+    "name": "Een mooiere naam kiezen",
+    "cost": "Zien wat het kost",
+    "seeDesign": "Je schermen bekijken",
+    "seeDemo": "De demo proberen",
+    "seeLive": "Je app proberen",
+    "redoDesign": "De schermen bijwerken",
+    "redoDemo": "De demo opnieuw bouwen",
+    "redoLive": "Je app bijwerken"
+  },
+  "button": {
+    "design": "Ontwerp openen",
+    "demo": "Demo openen",
+    "live": "Je app openen",
+    "oldDesign": "Vorig ontwerp openen",
+    "oldDemo": "Vorige demo openen"
+  },
+  "newTab": "opent in een nieuw tabblad",
+  "notRunning": "draait niet, vraag Pam het opnieuw te openen",
+  "down": {
+    "design": "Je ontwerp draait nu niet. Vraag Pam het opnieuw te openen.",
+    "demo": "Je demo draait nu niet. Vraag Pam hem opnieuw te openen."
+  },
+  "afterLive": {
+    "title": "Je app is klaar",
+    "body": "Vraag Pam wanneer je wilt om wijzigingen of nieuwe functies, en je app wordt direct bijgewerkt. Deze pagina volgt die wijzigingen niet. Ze blijft de laatste instelstappen hieronder volgen.",
+    "setTitle": "Je app is helemaal klaar",
+    "setBody": "Vraag Pam wanneer je wilt om wijzigingen of nieuwe functies, en je app wordt direct bijgewerkt. Deze pagina volgt die wijzigingen niet, dus je kunt haar nu sluiten."
+  },
+  "steps": {
+    "all": "Alle stappen",
+    "after": "Na de lancering"
+  },
+  "row": {
+    "idea": "Je idee",
+    "design": "Ontwerp",
+    "demo": "Demo",
+    "live": "Live app",
+    "access": "Wie wat mag zien",
+    "pay": "Betalingen",
+    "name": "Naam en linkvoorbeeld",
+    "cost": "Wat het kost"
+  },
+  "payHint": "(alleen als je app betalingen ontvangt)",
+  "pill": {
+    "done": "Klaar",
+    "now": "Hier ben je",
+    "redo": "Bijwerken",
+    "skip": "Niet nodig",
+    "next": "Hierna"
+  },
+  "footer": "Om iets te veranderen of verder te gaan, praat met Pam in je chat"
+}

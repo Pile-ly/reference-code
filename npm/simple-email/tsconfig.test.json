@@ -1,0 +1,13 @@
+// Typechecks the test files the build config deliberately excludes. Without
+// this the stubs annotated `PilelyClient` drift from the interface silently —
+// vitest does not typecheck, so a missing member is invisible until a
+// consumer hits it. No emit: this config exists to fail, not to build.
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": []
+}
