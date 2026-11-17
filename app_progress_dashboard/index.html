@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="pilely-dashboard-lang" content="">
+<meta name="color-scheme" content="light dark">
+<title>Your app's progress</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<main>
+  <header class="header">
+    <div>
+      <div class="app-name" id="app-name"></div>
+      <div class="muted status" id="status"><span id="status-dot"></span><span id="status-text"></span></div>
+    </div>
+    <div class="controls">
+      <button type="button" class="icon-button" id="help"></button>
+      <select id="language"></select>
+      <div class="segmented" id="theme" role="group"></div>
+    </div>
+  </header>
+
+  <section class="panel about" id="about" hidden>
+    <div class="about-head">
+      <span class="about-title" id="about-title"></span>
+      <button type="button" id="got-it"></button>
+    </div>
+    <p id="about-body"></p>
+    <ul id="about-points"></ul>
+  </section>
+
+  <section class="panel card" id="card" aria-live="polite"></section>
+
+  <section class="panel steps">
+    <button type="button" class="steps-toggle" id="steps-toggle" aria-controls="steps-list" aria-expanded="true"></button>
+    <div id="steps-list"></div>
+  </section>
+
+  <footer class="muted footer" id="footer"></footer>
+</main>
+</body>
+</html>

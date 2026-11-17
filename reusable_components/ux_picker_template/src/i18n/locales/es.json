@@ -1,0 +1,25 @@
+{
+  "picker": {
+    "note": "Esto es solo sobre el estilo: el aspecto y la sensación de tu app. No es la lista de todas las páginas que vamos a construir. ¿Quieres ver una página o función concreta? Solo dímelo.",
+    "width": {
+      "label": "Ancho de vista previa",
+      "phone": "📱 Móvil",
+      "computer": "💻 Ordenador"
+    },
+    "looks": {
+      "label": "Estilos",
+      "previous": "Estilo anterior",
+      "next": "Estilo siguiente"
+    },
+    "help": {
+      "open": "¿Qué es esta página?",
+      "close": "Cerrar",
+      "title": "¿Qué es esta página?",
+      "p1": "Estás eligiendo cómo se <1>verá</1> tu app. Esta página muestra una app de ejemplo en varios estilos: las pantallas y el contenido son solo muestras, no tu app real.",
+      "p2": "<0>Cambia de estilo</0> con los botones de abajo, y usa los botones de móvil y ordenador para ver cómo se siente cada uno en ambos anchos.",
+      "p3": "Cuando uno te convenza, dime su nombre —como <1>\"Me gusta Bold\"</1>— y construiré tu app con ese estilo.",
+      "p4": "Nada tiene que ser perfecto aquí. También puedes pedirme que <1>ajuste un estilo</1> —<3>\"Playful, pero en azul en vez de rosa\"</3>— o que te <5>enseñe más opciones</5> si ninguno encaja.",
+      "gotIt": "Entendido"
+    }
+  }
+}

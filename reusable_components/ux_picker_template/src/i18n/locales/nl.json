@@ -1,0 +1,25 @@
+{
+  "picker": {
+    "note": "Dit gaat alleen over stijl — hoe je app eruitziet en aanvoelt. Het is niet de lijst van alle pagina's die we gaan bouwen. Wil je een specifieke pagina of functie zien? Zeg het gewoon.",
+    "width": {
+      "label": "Voorbeeldbreedte",
+      "phone": "📱 Telefoon",
+      "computer": "💻 Computer"
+    },
+    "looks": {
+      "label": "Stijlen",
+      "previous": "Vorige stijl",
+      "next": "Volgende stijl"
+    },
+    "help": {
+      "open": "Wat is deze pagina?",
+      "close": "Sluiten",
+      "title": "Wat is deze pagina?",
+      "p1": "Je kiest hoe je app eruit gaat <1>zien</1>. Deze pagina toont een voorbeeldapp in een paar stijlen — de schermen en de inhoud zijn maar voorbeelden, niet je echte app.",
+      "p2": "<0>Blader door de stijlen</0> met de knoppen onderaan, en gebruik de telefoon- en computerknop om te zien hoe elke stijl op beide breedtes voelt.",
+      "p3": "Als er één goed voelt, noem me gewoon de naam — bijvoorbeeld <1>\"Ik vind Bold mooi\"</1> — en ik bouw je app in die stijl.",
+      "p4": "Niets hoeft hier perfect te zijn. Je kunt me ook vragen een <1>stijl bij te schaven</1> — <3>\"Playful, maar blauw in plaats van roze\"</3> — of om <5>meer keuzes te laten zien</5> als geen enkele past.",
+      "gotIt": "Duidelijk"
+    }
+  }
+}
